@@ -20,7 +20,9 @@
 
 using namespace RooFit ;
 
-// Script uses a previously made .root file containing a histogram with signale only exponential decay in TAU variable for Lambda_cplus hadron and makes an exponential fit to it, then plots and saves the data and fit.
+// Script uses a previously made .root file containing a histogram with (signal 
+// only) exponential decay in TAU variable for Lambda_cplus hadron and makes an 
+// exponential fit to it, then plots and saves the data and fit.
 
 void lifetimeFit()
 {

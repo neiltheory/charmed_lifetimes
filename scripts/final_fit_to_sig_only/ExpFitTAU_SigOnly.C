@@ -26,7 +26,8 @@ using namespace RooFit ;
 
 void lifetimeFit()
 {
-  TFile f("~/Documents/uni/LHCb_CharmSummerProj/Gedcode/baryon-lifetimes-2015/scripts_neil_warrack/lifetime_removeBkg/histo_Lambda_cplus_TAU_lifetime_SigOnly.root") ;
+  //TFile f("~/Documents/uni/LHCb_CharmSummerProj/Gedcode/baryon-lifetimes-2015/scripts_neil_warrack/lifetime_removeBkg/histo_Lambda_cplus_TAU_lifetime_SigOnly.root") ;
+  TFile f("~/Documents/uni/LHCb_CharmSummerProj/Gedcode/baryon-lifetimes-2015/") ;
   TH1F *h_signal = (TH1F*)f.Get("h_sig");
 
   // Read histogram into RooFit dataset

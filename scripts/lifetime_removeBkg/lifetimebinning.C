@@ -9,6 +9,8 @@
 #include "RooPlot.h"
 #include "TTree.h"
 #include "TH1D.h"
+#include "TH1F.h"
+#include "TH1.h"
 #include "TRandom.h"
 #include "RooFitResult.h"
 #include "RooAddPdf.h"
@@ -129,10 +131,10 @@ void binFit() {
  
 
 
-  // Create histogram of signal candidates in TAU variable.
+  // Create array of signal candidates in TAU variable.
   int nBins=10 ;      // If you change this, rememeber to change array sizes below!
   
-  TH1D h_Signal("h_Signal","h_Signal",10 ,0.00025 ,0.002) ;
+
 
   // Create arrays to store signal yield and error for each bin. 
   double signalYield[10] ;
@@ -176,18 +178,30 @@ void binFit() {
     signalError[i] = binError ;
     binCent[i] = binCentre ;
 
-    // Fill histogram
-    h_Signal->SetBinContent(i+1, signalYield[i]) ;
-    h_Signal->SetBinError(i+1, signalError[i]) ;
 }
 
+  TH1F *h_Signal = new TH1F("h_Signal","h_Signal",10 ,0.00025 ,0.002) ;
+  int j ;
+
+    // Fill histogram
+  for (j=0; j<nBins; j++){
+  h_Signal->SetBinContent(j+1, signalYield[j]) ;
+  h_Signal->SetBinError(j+1, signalError[j]) ;
+  cout<<"bin"<<j+1<<"... yield:"<<signalYield[j]<<" error:"<<signalError[j]<<endl;
+}
 
   // Create and fill histogram with signal yields and errors calculated 
   // from the fits made in the 'for' loop, above.
 
   TFile hf("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/histoTAU_Lambda_cplus_SigOnly_cut01.root", "RECREATE") ;
-  h_Signal.Write() ;
+  h_Signal->Write() ;
   cout<<"histogram written (/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/histoTAU_Lambda_cplus_SigOnly_cut01.root)"<<endl ;
+
+
+  /*
+
+
+  TH1F* testFormatHisto = h_Signal.Clone("testFormatHisto");
 
 
   // Draw visual confirmation that initial fit to (signal & background) 
@@ -209,14 +223,14 @@ void binFit() {
 
   //c1->SetLogy() ;
   //RooPlot *signalPlot = Lambda_cplus_TAU.frame(Title("Signal plot")) ;
-  //formatHisto(h_Signal,"something","somethang");
+  formatHisto(testFormatHisto,"something","somethang");
   c102_2->cd() ;
-  h_Signal.Draw() ;
+  testFormatHisto.Draw() ;
   //signalPlot->Draw() ;
   //c1->SaveAs("TEST2signalHistoPlot_from_lifetimebinning.png") ;
   c102->Update() ;
   c102->Print("visConf_cut01.png")
-
+  */
 
   cout<<endl<<endl<<"************info************"<<endl;
   cout<<"signalHistoPlot_from_lifetimebinning.png written"<<endl<<endl ;

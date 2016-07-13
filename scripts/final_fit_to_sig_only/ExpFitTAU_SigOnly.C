@@ -27,8 +27,8 @@ using namespace RooFit ;
 void lifetimeFit()
 {
   //TFile f("~/Documents/uni/LHCb_CharmSummerProj/Gedcode/baryon-lifetimes-2015/scripts_neil_warrack/lifetime_removeBkg/histo_Lambda_cplus_TAU_lifetime_SigOnly.root") ;
-  TFile f("~/Documents/uni/LHCb_CharmSummerProj/Gedcode/baryon-lifetimes-2015/") ;
-  TH1F *h_signal = (TH1F*)f.Get("h_sig");
+  TFile f("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/histoTAU_Lambda_cplus_SigOnly_cut01.root") ;
+  TH1F *h_signal = (TH1F*)f.Get("h_Signal");
 
   // Read histogram into RooFit dataset
   RooRealVar tau("tau", "tau (ns)", 0.00025, 0.002) ;
@@ -52,12 +52,12 @@ void lifetimeFit()
   RooPlot* lifetimePlot = tau.frame() ;
   binnedData.plotOn(lifetimePlot) ;
   lifetimePDF.plotOn(lifetimePlot);
-  lifetimePlot->Draw();
+  c1.SaveAs("histo_Lambda_cplus_TAU_lifetime_SigOnly_FITTED.png") ;
   lifetimePlot->GetYaxis()->SetTitleOffset(1.4);
   
   // Save file as .png
-c1.SaveAs("histo_Lambda_cplus_TAU_lifetime_SigOnly_FITTED.png") ;
 
+  lifetimePlot->Draw();
 }
 
 

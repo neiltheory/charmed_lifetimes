@@ -180,14 +180,16 @@ void binFit() {
 
 }
 
-  TH1F *h_Signal = new TH1F("h_Signal","h_Signal",10 ,0.00025 ,0.002) ;
+  TH1D *h_Signal = new TH1D("h_Signal","h_Signal",10 ,0.00025 ,0.002) ;
   int j ;
-
+  int tempnumber ;
     // Fill histogram
   for (j=0; j<nBins; j++){
   h_Signal->SetBinContent(j+1, signalYield[j]) ;
   h_Signal->SetBinError(j+1, signalError[j]) ;
-  cout<<"bin"<<j+1<<"... yield:"<<signalYield[j]<<" error:"<<signalError[j]<<endl;
+  tempnumber = h_Signal->GetBinContent(j+1);
+  cout<<"bin"<<j+1<<endl;
+  cout<<"yield:"<<h_Signal->GetBinContent(j+1)<<" error:"<<h_Signal->GetBinError(j+1)<<endl;
 }
 
   // Create and fill histogram with signal yields and errors calculated 

@@ -35,26 +35,35 @@ void binFit() {
   TFile *datafile = TFile::Open("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/TMVA_cut01_firsttry.root") ;
 
 
-  // Define dataset, variables and their limits.
-  RooDataSet* ds = (RooDataSet*)datafile->Get("ds") ;
+  // Define and fill Tree.
+  //TTree* mytree = (TTree*) datafile->Get("Lambda_cToKppiTuple/DecayTree;1");
+  TTree* mytree = (TTree*) datafile->Get("TrainTree");
 
+
+  // Variables and their limits.
   RooRealVar Lambda_cplus_TAU("Lambda_cplus_TAU","Lambda_cplus_TAU",0.00025 ,0.002 ,"ns") ;
   double highestTAU;
   double lowestTAU;
-  ds->RooAbsData::getRange(Lambda_cplus_TAU, lowestTAU, highestTAU);
 
   RooRealVar Lambda_cplus_M("Lambda_cplus_M","Lambda_cplus_M",2216 ,2356, "GeV") ; 
   double highestM;
   double lowestM;
-  ds->RooAbsData::getRange(Lambda_cplus_M, lowestM, highestM) ;
-  
+
   RooRealVar Lambda_cplus_IPCHI2_OWNPV("Lambda_cplus_IPCHI2_OWNPV","Lambda_cplus_IPCHI2_OWNPV",-100 ,100) ; 
 
+  RooRealVar BDTG("BDTG","BDTG",-1. ,1.) ; 
+
+
+  // Define dataset and make cuts.
+  //RooDataSet* ds = (RooDataSet*)datafile->Get("ds") ;
+  RooDataSet ds("ds","ds",RooArgSet(Lambda_cplus_TAU, Lambda_cplus_M, Lambda_cplus_IPCHI2_OWNPV, BDTG),Import(*mytree),Cut("(0.00025<Lambda_cplus_TAU)&&(Lambda_cplus_TAU<0.002)&&(Lambda_cplus_M<2356)&&(2216<Lambda_cplus_M)&&(0.1506<BDTG)&&(Lambda_cplus_IPCHI2_OWNPV<3)")) ;
 
 
   // Build probability density functions (PDFs).
   // Combined double Gaussian PDF.
 
+  ds.RooAbsData::getRange(Lambda_cplus_TAU, lowestTAU, highestTAU);
+  ds.RooAbsData::getRange(Lambda_cplus_M, lowestM, highestM) ;
   double mass_peak = 2286 ;  // initial mean value for fit (from theory)
 
   RooRealVar gausMean1("gausMean1", "gausMean1",mass_peak, lowestM, highestM, "GeV") ;
@@ -75,8 +84,8 @@ void binFit() {
   RooExponential expo_bkg("expo_bkg", "expo_bkg", Lambda_cplus_M, expoPar);
 
   // Model PDF.
-  RooRealVar nSignal("nSignal","nSignal", 200000, 0, 409570);
-  RooRealVar nBkg("nBkg","nBkg", 200000, 0, 409570);
+  RooRealVar nSignal("nSignal","nSignal", 23000, 0, 409570);
+  RooRealVar nBkg("nBkg","nBkg", 13000, 0, 409570);
   
   //RooAddPdf model("model","model",RooArgList(gauss, pol0),RooArgList(nSignal, pol0_yield));
   //RooAddPdf model("model","model",RooArgList(gauss, expo_bkg),RooArgList(nSignal, nBkg));
@@ -87,7 +96,7 @@ void binFit() {
   // Fit model PDF to data.
   //model.fitTo(*ds, Range("R1"));
   //expo1.fitTo(*ds, Range("R1"));
-  model.fitTo(*ds, Extended()) ;
+  model.fitTo(ds, Extended()) ;
   //RooFitResult* rmodel = model.fitTo(*ds,Save()) ;
   //RooFitResult* rexpo_bkg = expo_bkg.fitTo(*ds,Save());
 
@@ -99,14 +108,14 @@ void binFit() {
 
   RooPlot *fullDataFit = Lambda_cplus_M.frame(Title("-Title-"));
   //ds.plotOn(frame,Binning(25)); //default is 100 bins
-  ds->plotOn(fullDataFit, Name("data"), MarkerColor(kBlack)) ;
-  ds->statOn(fullDataFit, Layout(0.65,0.88,0.2), What("N")) ; //NB Layout(xmin,xmax,ymax)
+  ds.plotOn(fullDataFit, Name("data"), MarkerColor(kBlack)) ;
+  ds.statOn(fullDataFit, Layout(0.65,0.88,0.2), What("N")) ; //NB Layout(xmin,xmax,ymax)
   model.plotOn(fullDataFit, Name("Model"), DrawOption("L")) ;
   model.plotOn(fullDataFit, Components(expo_bkg), LineStyle(kDashed)) ;
   model.paramOn(fullDataFit,Layout(0.19, 0.45, 0.88)) ; //was 0.4
   fullDataFit->getAttText()->SetTextSize(0.022) ;
 
-  RooDataHist hist4Chi2("hist4Chi2","hist4Chi2", RooArgSet(Lambda_cplus_M), *ds) ;
+  RooDataHist hist4Chi2("hist4Chi2","hist4Chi2", RooArgSet(Lambda_cplus_M), ds) ;
   Double_t chi2 = fullDataFit->chiSquare("Model","data",7) ;
 
 
@@ -130,8 +139,8 @@ void binFit() {
   double signalError[10] ;
   double binCent[10] ;      // to record centre of bin.
 
-  // Split data into 'TAU' bins, (individually) make mass fit to bin contents and
-  // store in array.
+  // Split data into 'TAU' bins, make mass fits to individual bins and store signal 
+  // yields in array.
 
 
   int i ;
@@ -146,7 +155,7 @@ void binFit() {
     binHighEdgeStr << binBoundaryHi;
 
     // Creat dataset for bin i only
-    RooDataSet* bindata = ds->reduce(RooFit::Cut(TString(binLowEdgeStr.str()) + " < Lambda_cplus_TAU && Lambda_cplus_TAU <= " + TString(binHighEdgeStr.str()))) ;
+    RooDataSet* bindata = ds.reduce(RooFit::Cut(TString(binLowEdgeStr.str()) + " < Lambda_cplus_TAU && Lambda_cplus_TAU <= " + TString(binHighEdgeStr.str()))) ;
 
     //model.fitTo(*bindata, gErrorIgnoreLevel = kInfo) ;
     model.fitTo(*bindata, "l") ;
@@ -178,7 +187,7 @@ void binFit() {
 
   TFile hf("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/histoTAU_Lambda_cplus_SigOnly_cut01.root", "RECREATE") ;
   h_Signal.Write() ;
-
+  cout<<"histogram written (/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/histoTAU_Lambda_cplus_SigOnly_cut01.root)"<<endl ;
 
 
   // Draw visual confirmation that initial fit to (signal & background) 
@@ -200,7 +209,7 @@ void binFit() {
 
   //c1->SetLogy() ;
   //RooPlot *signalPlot = Lambda_cplus_TAU.frame(Title("Signal plot")) ;
-  formatHisto(h_Signal,"something","somethang");
+  //formatHisto(h_Signal,"something","somethang");
   c102_2->cd() ;
   h_Signal.Draw() ;
   //signalPlot->Draw() ;
@@ -232,7 +241,7 @@ void binFit() {
 
   int k ;
   for (k=0; k<nBins; k++){
-    cout<<"Bin number "<<k+1<<" (bin centre = "<<binCent[k]<<"ns):"<<endl;
+    cout<<"Bin number "<<k+1<<" (bin centre = "<<binCent[k]*1000<<"ps):"<<endl;
     cout<<"   "<<"signal yield = "<<signalYield[k]<<endl ;
     cout<<"   "<<"signal error = "<<signalError[k]<<endl<<endl ;
   }

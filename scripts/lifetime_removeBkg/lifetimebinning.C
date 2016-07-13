@@ -31,7 +31,9 @@ void binFit() {
 
   // Open appropriate .root file.
   //TFile *datafile = TFile::Open("~/Documents/uni/LHCb_CharmSummerProj/Gedcode/baryon-lifetimes-2015/data/run-II-data/datafileLambda_TAUmin200fs_max2200fs_Mmin2216_max2356.root");
-  TFile *datafile = TFile::Open("~/Documents/uni/LHCb_CharmSummerProj/Gedcode/baryon-lifetimes-2015/data/run-II-data/datafileLambda_TAUmin200fs_max2200fs_Mmin2216_max2356_CutIPCHI2lt3.root"); 
+  //TFile *datafile = TFile::Open("~/Documents/uni/LHCb_CharmSummerProj/Gedcode/baryon-lifetimes-2015/data/run-II-data/datafileLambda_TAUmin200fs_max2200fs_Mmin2216_max2356_CutIPCHI2lt3.root"); 
+  TFile *datafile = TFile::Open("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/TMVA_cut01_firsttry.root") ;
+
 
   // Define dataset, variables and their limits.
   RooDataSet* ds = (RooDataSet*)datafile->Get("ds") ;
@@ -92,7 +94,9 @@ void binFit() {
 
 
 
-  // Plot the data and the fit
+  // Plot the data and the fit (not necesary, but provides a vidual confirmation that
+  // things 'look good'.)
+
   RooPlot *fullDataFit = Lambda_cplus_M.frame(Title("-Title-"));
   //ds.plotOn(frame,Binning(25)); //default is 100 bins
   ds->plotOn(fullDataFit, Name("data"), MarkerColor(kBlack)) ;
@@ -164,39 +168,45 @@ void binFit() {
     binCent[i] = binCentre ;
 
     // Fill histogram
-    h_sig->SetBinContent(i+1, signalYield[i]) ;
-    h_sig->SetBinError(i+1, signalError[i]) ;
+    h_Signal->SetBinContent(i+1, signalYield[i]) ;
+    h_Signal->SetBinError(i+1, signalError[i]) ;
 }
 
 
   // Create and fill histogram with signal yields and errors calculated 
   // from the fits made in the 'for' loop, above.
 
-  TFile hf("histo_Lambda_cplus_TAU_lifetime_SigOnly.root", "RECREATE") ;
-  h_sig.Write() ;
-  //__________________TEST1
+  TFile hf("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/histoTAU_Lambda_cplus_SigOnly_cut01.root", "RECREATE") ;
+  h_Signal.Write() ;
+
+
+
+  // Draw visual confirmation that initial fit to (signal & background) 
+  // data is sensible, and that output histo is exponential in form and
+  // save as: visConf_cut01.png
+  
   TCanvas *c102 = new TCanvas("c102","",600,900) ;
   formatCanvas4(c102) ;
 
-
   c102_1->cd() ;
-  c1->SetFillColor(33) ;
-  c1->SetFrameFillColor(41) ;
-  c1->SetGrid() ;
-  fullDataFit->GetYaxis()->SetTitleOffset(1.4) ; fullDataFit->Draw() ;
-  gPad->SetLeftMargin(0.15) ;
-  fullDataFit->GetYaxis()->SetTitleOffset(1.4) ;
+  //c1->SetFillColor(33) ;
+  //c1->SetFrameFillColor(41) ;
+  //c1->SetGrid() ;
+  //fullDataFit->GetYaxis()->SetTitleOffset(1.4) ; fullDataFit->Draw() ;
+  //gPad->SetLeftMargin(0.15) ;
+  //fullDataFit->GetYaxis()->SetTitleOffset(1.4) ;
   fullDataFit->Draw() ;
-  c1->SaveAs("TEST1.eps");
-  //__________________TEST2  
-  // Plot & Draw
-  //TCanvas *c1 = new TCanvas("c1","c1", 800, 800) ;
+
+
   //c1->SetLogy() ;
   //RooPlot *signalPlot = Lambda_cplus_TAU.frame(Title("Signal plot")) ;
-  h_sig.Draw() ;
+  formatHisto(h_Signal,"something","somethang");
+  c102_2->cd() ;
+  h_Signal.Draw() ;
   //signalPlot->Draw() ;
-  c1->SaveAs("TEST2signalHistoPlot_from_lifetimebinning.png") ;
-
+  //c1->SaveAs("TEST2signalHistoPlot_from_lifetimebinning.png") ;
+  c102->Update() ;
+  c102->Print("visConf_cut01.png")
 
 
   cout<<endl<<endl<<"************info************"<<endl;
@@ -208,7 +218,7 @@ void binFit() {
   cout<<sigma2<<endl ;
   cout<<nFrac<<endl ;
   cout<<"exponential fit parameters to full data (signal + background):"<<endl;
-   cout<<expoPar<<endl<<endl ;
+  cout<<expoPar<<endl<<endl ;
 
 
 
@@ -287,4 +297,33 @@ void formatCanvas4(TCanvas* canvas){
   canvas->cd(4);
   gPad->SetLeftMargin(0.2);
   gPad->SetBottomMargin(0.2);
+}
+
+
+
+void formatHisto(TH1F* hist, const char* xtitle, const char* ytitle, int ndivisionsX=506, int ndivisionsY=506){
+
+  //hist->Sumw2();
+  //hist->SetMinimum(0.8);
+  //hist->SetMaximum(1.0);
+  //hist->SetTitle("");
+  //hist->SetStats(0010);
+  hist->SetNdivisions(ndivisionsX,"X");
+  hist->SetNdivisions(ndivisionsY,"Y");
+  hist->GetXaxis()->SetTitle(xtitle);
+  hist->GetYaxis()->SetTitle(ytitle);
+  hist->GetXaxis()->SetTitleColor(kBlack);
+  hist->GetYaxis()->SetTitleColor(kBlack);
+  hist->GetXaxis()->SetTitleOffset(1.3);//0.9
+  hist->GetYaxis()->SetTitleOffset(1.7);//0.9
+  hist->GetXaxis()->SetLabelOffset(0.02);//0.065
+  hist->GetYaxis()->SetLabelOffset(0.02);//0.065
+  hist->GetXaxis()->SetTitleSize(0.07);//0.065
+  hist->GetYaxis()->SetTitleSize(0.06);//0.065
+  hist->GetXaxis()->SetLabelSize(0.055);//0.065
+  hist->GetYaxis()->SetLabelSize(0.055);//0.065
+  hist->SetFillStyle(3005);
+  hist->SetFillColor(kBlack);
+  hist->SetLineColor(kBlack);
+  hist->SetLineWidth(1.1);
 }

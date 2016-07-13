@@ -30,7 +30,7 @@ using namespace RooFit ;
 
 
 void binFit() {
-
+  gROOT->SetBatch(kTRUE);
   // Open appropriate .root file.
   //TFile *datafile = TFile::Open("~/Documents/uni/LHCb_CharmSummerProj/Gedcode/baryon-lifetimes-2015/data/run-II-data/datafileLambda_TAUmin200fs_max2200fs_Mmin2216_max2356.root");
   //TFile *datafile = TFile::Open("~/Documents/uni/LHCb_CharmSummerProj/Gedcode/baryon-lifetimes-2015/data/run-II-data/datafileLambda_TAUmin200fs_max2200fs_Mmin2216_max2356_CutIPCHI2lt3.root"); 
@@ -198,72 +198,62 @@ void binFit() {
   TFile hf("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/histoTAU_Lambda_cplus_SigOnly_cut01.root", "RECREATE") ;
   h_Signal->Write() ;
   cout<<"histogram written (/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/histoTAU_Lambda_cplus_SigOnly_cut01.root)"<<endl ;
+  //h_Signal->Draw();
 
 
-  /*
+
+  //=================NON-ESSENTIAL TO ANALYSIS=================
+  // This section draws the overall fit (to sig and background for all data) and draws the signal-only 
+  // TAU variable hitogram with a exponential fit. This is simple for a visual confirmation that 
+  // initial fit is sensible, and that output histo is exponential in form. (save as: visConf_cut01.png)
+
+  RooDataHist vis_binnedData("vis_binnedData", "vis_binnedData", RooArgSet(Lambda_cplus_TAU),h_Signal) ;  
+  RooRealVar vis_expo("vis_expo","exponential parameter for visual confirmation", -5000.,-5000., 0.) ;
+  RooExponential vis_lifetimePDF("vis_lifetimePDF","vis_lifetimePDF", Lambda_cplus_TAU, vis_expo) ;
+  vis_lifetimePDF.fitTo(vis_binnedData) ;
+  RooPlot* vis_lifetimePlot = Lambda_cplus_TAU.frame() ;
+  vis_binnedData.plotOn(vis_lifetimePlot) ;
+  vis_lifetimePDF.plotOn(vis_lifetimePlot) ;
 
 
-  TH1F* testFormatHisto = h_Signal.Clone("testFormatHisto");
-
-
-  // Draw visual confirmation that initial fit to (signal & background) 
-  // data is sensible, and that output histo is exponential in form and
-  // save as: visConf_cut01.png
-  
   TCanvas *c102 = new TCanvas("c102","",600,900) ;
   formatCanvas4(c102) ;
 
   c102_1->cd() ;
-  //c1->SetFillColor(33) ;
-  //c1->SetFrameFillColor(41) ;
-  //c1->SetGrid() ;
-  //fullDataFit->GetYaxis()->SetTitleOffset(1.4) ; fullDataFit->Draw() ;
-  //gPad->SetLeftMargin(0.15) ;
-  //fullDataFit->GetYaxis()->SetTitleOffset(1.4) ;
   fullDataFit->Draw() ;
 
-
-  //c1->SetLogy() ;
-  //RooPlot *signalPlot = Lambda_cplus_TAU.frame(Title("Signal plot")) ;
-  formatHisto(testFormatHisto,"something","somethang");
   c102_2->cd() ;
-  testFormatHisto.Draw() ;
-  //signalPlot->Draw() ;
-  //c1->SaveAs("TEST2signalHistoPlot_from_lifetimebinning.png") ;
+  h_Signal->Draw() ;
+
+  c102_3->cd() ;
+  vis_lifetimePlot->Draw() ;
+
   c102->Update() ;
-  c102->Print("visConf_cut01.png")
-  */
+  c102->SaveAs("visConf_cut01.png") ;
 
-  cout<<endl<<endl<<"************info************"<<endl;
-  cout<<"signalHistoPlot_from_lifetimebinning.png written"<<endl<<endl ;
-  cout<<"double Gaussian fit parameters to full data (signal + background):"<<endl;
-  cout<<gausMean1<<endl ;
-  cout<<gausMean2<<endl ;
-  cout<<sigma1<<endl ;
-  cout<<sigma2<<endl ;
-  cout<<nFrac<<endl ;
-  cout<<"exponential fit parameters to full data (signal + background):"<<endl;
-  cout<<expoPar<<endl<<endl ;
+  // Print useful info to screen
+
+  cout<<endl<<"   ************info************"<<endl<<endl;
+  
+  cout<<"Double Gaussian fit parameters to full data (signal + background):"<<endl;
+  cout<<"  "<<gausMean1<<endl ;
+  cout<<"  "<<gausMean2<<endl ;
+  cout<<"  "<<sigma1<<endl ;
+  cout<<"  "<<sigma2<<endl ;
+  cout<<"  "<<nFrac<<endl ;
+  cout<<"Exponential fit parameters to full data (signal + background):"<<endl;
+  cout<<"  "<<expoPar<<endl<<endl ;
 
 
-
-  // Create arrays to store signal yeald and error for each bin. 
-  //double signalYield[10] ;
-  //double signalError[10] ;
-  //double binCent[10] ; // Records centre of bin, a relic from Gediminas' code
-
-  // Split TAU distribution into bins, make mass fit to bin contents, fill 
-  // histogram "h_sig" with signal yield calculated from fit.
 
   int k ;
   for (k=0; k<nBins; k++){
     cout<<"Bin number "<<k+1<<" (bin centre = "<<binCent[k]*1000<<"ps):"<<endl;
     cout<<"   "<<"signal yield = "<<signalYield[k]<<endl ;
-    cout<<"   "<<"signal error = "<<signalError[k]<<endl<<endl ;
-  }
-  cout<<"done."<<endl<<endl<<endl ;
+    cout<<"   "<<"signal error = "<<signalError[k]<<endl ;
+  };
+ 
 
-    
     /*
         // Chi^2___________________
 	Lambda_cplus_M.setBins(100);
@@ -273,34 +263,6 @@ void binFit() {
 	minuit.migrad();
 	minuit.hesse();
     */
-    
-    /*  
-	gPad->SetLeftMargin(0.15) ;
-	Lambda_cplus_TAUframe->GetYaxis()->SetTitleOffset(1.4) ; 
-	Lambda_cplus_TAUframe->Draw() ;
-	c1->SaveAs("temp_binned3.eps");
-    */  
-    
-    
-   /*
-   TLatex Tl;
-   Tl.SetNDC();
-   Tl.SetTextSize(0.025); //was 0.02
-   Tl.DrawLatex(0.69,0.75,"#scale[1.1]{#Lambda^{+}_{c}} #rightarrow K^{-} #pi^{+} #it{p}");
-   Tl.DrawLatex(0.68,0.8,"Charmed Lambda (udc)");
-   
-   // Print info to screen
-   cout<<endl<<"________________INFO__________________"<<endl<<endl;  
-   cout<< "Lowest lifetime value in dataset (should be:) = "<<lowestTAU<<endl;
-   cout<< "Highest lifetime value in dataset = "<<highestTAU<<endl;
-   cout<< "Lowest mass value in dataset (should be: 2216)= "<<lowestM<<endl;
-   cout<< "Highest mass value in dataset (should be: 2356)= "<<highestM<<endl;
-   
-   cout<<"number of events should be: 861373"<<endl ; 
-   ds->Print();  //number of events in dataset    
-   //rmodel->Print(); //results  
-   //cout<<"Chi squared ="<<chi2<<endl ;
-   */
 }
 
 

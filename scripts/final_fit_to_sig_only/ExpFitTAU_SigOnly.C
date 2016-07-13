@@ -52,12 +52,12 @@ void lifetimeFit()
   RooPlot* lifetimePlot = tau.frame() ;
   binnedData.plotOn(lifetimePlot) ;
   lifetimePDF.plotOn(lifetimePlot);
-  c1.SaveAs("histo_Lambda_cplus_TAU_lifetime_SigOnly_FITTED.png") ;
-  lifetimePlot->GetYaxis()->SetTitleOffset(1.4);
-  
-  // Save file as .png
 
-  lifetimePlot->Draw();
+  lifetimePlot->GetYaxis()->SetTitleOffset(1.4);
+  lifetimePlot->Draw();  
+  // Save file as .png
+  c1.SaveAs("histo_Lambda_cplus_TAU_lifetime_SigOnly_FITTED.png") ;
+
 }
 
 

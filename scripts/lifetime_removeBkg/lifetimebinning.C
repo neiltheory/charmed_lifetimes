@@ -23,37 +23,37 @@ using namespace RooFit ;
 
 
 // Script opens a previously made .root file which contains a dataset type object which 
-// holds all events in a preselected and appropriate range for the TAU lifetime variable 
-// of the Lambda_cplus particel (OR the Xi_c).
+// holds all events in preselected and appropriate ranges for variables of the 
+// Lambda_cplus particle.
 
 
 void binFit() {
 
-  // Open appropriate "dataset" .root file (made using mkDataSet.c script)
+  // Open appropriate .root file.
   //TFile *datafile = TFile::Open("~/Documents/uni/LHCb_CharmSummerProj/Gedcode/baryon-lifetimes-2015/data/run-II-data/datafileLambda_TAUmin200fs_max2200fs_Mmin2216_max2356.root");
   TFile *datafile = TFile::Open("~/Documents/uni/LHCb_CharmSummerProj/Gedcode/baryon-lifetimes-2015/data/run-II-data/datafileLambda_TAUmin200fs_max2200fs_Mmin2216_max2356_CutIPCHI2lt3.root"); 
 
-  // Define dataset
+  // Define dataset, variables and their limits.
   RooDataSet* ds = (RooDataSet*)datafile->Get("ds") ;
 
-  // Define TAU variable, get limits.
-  RooRealVar Lambda_cplus_TAU("Lambda_cplus_TAU","Lambda_cplus_TAU",0.0002 ,0.0022 ,"ns") ;  //real range of interest is [0.00025, 0.002], this is defined later.
+  RooRealVar Lambda_cplus_TAU("Lambda_cplus_TAU","Lambda_cplus_TAU",0.00025 ,0.002 ,"ns") ;
   double highestTAU;
   double lowestTAU;
   ds->RooAbsData::getRange(Lambda_cplus_TAU, lowestTAU, highestTAU);
 
-  // Define Mass variable, get limits.
   RooRealVar Lambda_cplus_M("Lambda_cplus_M","Lambda_cplus_M",2216 ,2356, "GeV") ; 
   double highestM;
   double lowestM;
   ds->RooAbsData::getRange(Lambda_cplus_M, lowestM, highestM) ;
   
-  // Define IPCHI2 variable
   RooRealVar Lambda_cplus_IPCHI2_OWNPV("Lambda_cplus_IPCHI2_OWNPV","Lambda_cplus_IPCHI2_OWNPV",-100 ,100) ; 
 
-  // Build combined double Gaussian PDF; "gaussComb".
- 
-  double mass_peak = 2286 ;  // initialize gaussian mean value for fit
+
+
+  // Build probability density functions (PDFs).
+  // Combined double Gaussian PDF.
+
+  double mass_peak = 2286 ;  // initial mean value for fit (from theory)
 
   RooRealVar gausMean1("gausMean1", "gausMean1",mass_peak, lowestM, highestM, "GeV") ;
   RooRealVar sigma1("sigma1","sigma1", 6, 0, 50) ;
@@ -68,11 +68,11 @@ void binFit() {
 
   //Lambda_cplus_TAU.setRange("R1",0.00018, 0.0012);
    
-  // Build exponential PDF; "expo_bkg"
+  // Exponential PDF.
   RooRealVar expoPar("expoPar","expoPar", -0.0001, -1., 0.);
   RooExponential expo_bkg("expo_bkg", "expo_bkg", Lambda_cplus_M, expoPar);
 
-  // Build model PDF
+  // Model PDF.
   RooRealVar nSignal("nSignal","nSignal", 200000, 0, 409570);
   RooRealVar nBkg("nBkg","nBkg", 200000, 0, 409570);
   
@@ -80,7 +80,9 @@ void binFit() {
   //RooAddPdf model("model","model",RooArgList(gauss, expo_bkg),RooArgList(nSignal, nBkg));
   RooAddPdf model("model","model",RooArgList(gaussComb, expo_bkg),RooArgList(nSignal, nBkg));
 
-  // Fit model
+
+
+  // Fit model PDF to data.
   //model.fitTo(*ds, Range("R1"));
   //expo1.fitTo(*ds, Range("R1"));
   model.fitTo(*ds, Extended()) ;
@@ -89,8 +91,8 @@ void binFit() {
 
 
 
-  //_____________  
-  // Plot
+
+  // Plot the data and the fit
   RooPlot *fullDataFit = Lambda_cplus_M.frame(Title("-Title-"));
   //ds.plotOn(frame,Binning(25)); //default is 100 bins
   ds->plotOn(fullDataFit, Name("data"), MarkerColor(kBlack)) ;
@@ -102,7 +104,7 @@ void binFit() {
 
   RooDataHist hist4Chi2("hist4Chi2","hist4Chi2", RooArgSet(Lambda_cplus_M), *ds) ;
   Double_t chi2 = fullDataFit->chiSquare("Model","data",7) ;
-  //_____________  
+
 
   // Set model fit variables to constants (NOT COEFFs!)
   gausMean1.setConstant() ;
@@ -113,30 +115,31 @@ void binFit() {
   expoPar.setConstant() ;
  
 
-  int nBins ; // define number of bins
-  nBins = 10 ;
-  
-  // Create lifertime histogram of signal candidates
-  TH1D h_sig("h_sig","h_sig",10 ,0.0002 ,0.0022) ;
 
-  // Create arrays to store signal yeald and error for each bin. 
+  // Create histogram of signal candidates in TAU variable.
+  int nBins=10 ;      // If you change this, rememeber to change array sizes below!
+  
+  TH1D h_Signal("h_Signal","h_Signal",10 ,0.00025 ,0.002) ;
+
+  // Create arrays to store signal yield and error for each bin. 
   double signalYield[10] ;
   double signalError[10] ;
-  double binCent[10] ; // Records centre of bin, a relic from Gediminas' code
+  double binCent[10] ;      // to record centre of bin.
 
-  // Split TAU distribution into bins, make mass fit to bin contents, fill 
-  // histogram "h_sig" with signal yield calculated from fit.
+  // Split data into 'TAU' bins, (individually) make mass fit to bin contents and
+  // store in array.
+
 
   int i ;
   for (i=0; i<nBins; i++){
  
-    double binBoundLo = 0.00025 + (i * ((0.002-0.00025)/nBins)) ;
-    double binBoundHi = 0.00025 + ((i+1) * ((0.002-0.00025)/nBins)) ;
+    double binBoundaryLo = 0.00025 + (i * ((0.002-0.00025)/nBins)) ;
+    double binBoundaryHi = 0.00025 + ((i+1) * ((0.002-0.00025)/nBins)) ;
 
     std::ostringstream binLowEdgeStr;
-    binLowEdgeStr << binBoundLo;
+    binLowEdgeStr << binBoundaryLo;
     std::ostringstream binHighEdgeStr;
-    binHighEdgeStr << binBoundHi;
+    binHighEdgeStr << binBoundaryHi;
 
     // Creat dataset for bin i only
     RooDataSet* bindata = ds->reduce(RooFit::Cut(TString(binLowEdgeStr.str()) + " < Lambda_cplus_TAU && Lambda_cplus_TAU <= " + TString(binHighEdgeStr.str()))) ;
@@ -145,7 +148,7 @@ void binFit() {
     model.fitTo(*bindata, "l") ;
     double binSignalYield = nSignal.getVal() ;
     double binError = nSignal.getError() ;
-    double binCentre = (binBoundLo + binBoundHi)/2. ;
+    double binCentre = (binBoundaryLo + binBoundaryHi)/2. ;
 
     printf("binSignalYield = %f", binSignalYield) ; 
     puts("") ;
@@ -166,6 +169,8 @@ void binFit() {
 }
 
 
+  // Create and fill histogram with signal yields and errors calculated 
+  // from the fits made in the 'for' loop, above.
 
   TFile hf("histo_Lambda_cplus_TAU_lifetime_SigOnly.root", "RECREATE") ;
   h_sig.Write() ;

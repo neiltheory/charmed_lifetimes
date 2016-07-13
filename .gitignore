@@ -2,5 +2,7 @@
 gangadir
 *.root
 *.pdf
+*.png
+*.eps
 scripts/tmva/plots/
 scripts/tmva/weights/

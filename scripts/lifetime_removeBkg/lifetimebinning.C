@@ -187,7 +187,6 @@ void binFit() {
   for (j=0; j<nBins; j++){
   h_Signal->SetBinContent(j+1, signalYield[j]) ;
   h_Signal->SetBinError(j+1, signalError[j]) ;
-  tempnumber = h_Signal->GetBinContent(j+1);
   cout<<"bin"<<j+1<<endl;
   cout<<"yield:"<<h_Signal->GetBinContent(j+1)<<" error:"<<h_Signal->GetBinError(j+1)<<endl;
 }

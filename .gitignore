@@ -4,5 +4,6 @@ gangadir
 *.pdf
 *.png
 *.eps
+*.pyc
 scripts/tmva/plots/
 scripts/tmva/weights/

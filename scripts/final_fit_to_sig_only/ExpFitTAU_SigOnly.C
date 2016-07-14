@@ -34,12 +34,12 @@ void lifetimeFit()
   RooRealVar tau("tau", "tau (ns)", 0.00025, 0.002) ;
   RooDataHist binnedData("binnedData", "binnedData", RooArgSet(tau), h_signal) ;
   // Build exponential PDF,
-  RooRealVar expoParam("expoParam", "expoParam", -5000, -5000, 0.) ;
-  //RooRealVar blindConst("blindConst", "blindConst", -50000., -10, 0.) ;
-  //RooUnblindOffset decayConstUnblind("decayConstUnblind", "Unblind decay rate", "someblindingstring", 0.0005, blindConst) ;
+  RooRealVar expoParam("expoParam", "expoParam", -5000., -5000., 0.) ;
+  RooRealVar blindConst("blindConst", "blindConst", -5000., -5000., 0.) ;
+  RooUnblindOffset decayConstUnblind("decayConstUnblind", "Unblind decay rate", "someblindingstring", 0.0005, blindConst) ;
 
-  RooExponential lifetimePDF("lifetimePDF", "lifetimePDF", tau, expoParam) ; 
-  //RooExponential lifetimePDF("lifetimePDF", "lifetimePDF", tau, decayConstUnblind) ;
+  //RooExponential lifetimePDF("lifetimePDF", "lifetimePDF", tau, expoParam) ; 
+  RooExponential lifetimePDF("lifetimePDF", "lifetimePDF", tau, decayConstUnblind) ;
 
   // Fit to data
   lifetimePDF.fitTo(binnedData, RooFit::SumW2Error(false)) ;

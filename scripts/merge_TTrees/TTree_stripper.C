@@ -38,13 +38,13 @@ void stripper() {
   fitdatatree->Write() ;
   newfile.Close() ;
 
-  cout<<"Reduced file made."<<endl<<endl ;
   cout<<"========================================================="<<endl;
   cout<<"To merge this reduced/stripped file with another file containing the same entries (but presumably with different variables) do:  python mergetrees.py <output file name> <input file name 1> <input TTreename 1> <input file name 2> <input TTree name 2>"<<endl<<endl ;
 
   cout<<"e.g."<<endl;
-  cout<<"python mergetrees.py ~/Documents/uni/LHCb_CharmSummerProj/learning_root/strippedToFitData_M_TAU_cut01_wAngVars_wSWeights.root ~/Documents/uni/LHCb_CharmSummerProj/learning_root/strippedToFitData_wAngVars.root DecayTree ~/Documents/uni/LHCb_CharmSummerProj/learning_root/sWeightsTree_M_TAU_cut01.root sTree"<<endl;
+  cout<<"  python mergetrees.py /afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/turbo_2015_data_wAngVars.root /afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/run-II-data/turbo_2015_data.root Lambda_cToKppiTuple/DecayTree /afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/AngularTreefile.root newtree"<<endl<<endl;
+cout<<"or..."<<endl;
+  cout<<"  python mergetrees.py ~/Documents/uni/LHCb_CharmSummerProj/learning_root/strippedToFitData_M_TAU_cut01_wAngVars_wSWeights.root ~/Documents/uni/LHCb_CharmSummerProj/learning_root/strippedToFitData_wAngVars.root DecayTree ~/Documents/uni/LHCb_CharmSummerProj/learning_root/sWeightsTree_M_TAU_cut01.root sTree"<<endl;
   cout<<"========================================================="<<endl<<endl<<endl ;
-
 
 }

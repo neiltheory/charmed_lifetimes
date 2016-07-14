@@ -1,7 +1,7 @@
 from getResVars_neil import *
 from array import array
 from ROOT import TFile, TTree
-filename = "~/Documents/uni/LHCb_CharmSummerProj/learning_root/turbo_2015_data.root"
+filename = "/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/run-II-data/turbo_2015_data.root"
 
 f = TFile.Open(filename, "read")
 tree = f.Get("Lambda_cToKppiTuple/DecayTree;1")

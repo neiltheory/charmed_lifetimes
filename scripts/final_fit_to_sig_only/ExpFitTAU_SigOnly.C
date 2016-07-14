@@ -55,8 +55,8 @@ void lifetimeFit()
 
   lifetimePlot->GetYaxis()->SetTitleOffset(1.4);
   lifetimePlot->Draw();  
-  // Save file as .png
-  c1.SaveAs("histo_Lambda_cplus_TAU_lifetime_SigOnly_FITTED.png") ;
+  // Save file as .pdf
+  c1.SaveAs("histo_Lambda_cplus_TAU_lifetime_SigOnly_FITTED.pdf") ;
 
 }
 

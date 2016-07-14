@@ -18,10 +18,11 @@
 #include <stdio.h>
 #include "TMath.h"
 
+using namespace std ;
 using namespace RooFit ;
 
 // Script uses a previously made .root file containing a histogram with (signal 
-// only) exponential decay in TAU variable for Lambda_cplus hadron and makes an 
+// only) exponential decay in TAU variable for Xi_c_plus hadron and makes an 
 // exponential fit to it, then plots and saves the data and fit.
 
 void lifetimeFit()
@@ -34,17 +35,17 @@ void lifetimeFit()
   RooDataHist binnedData("binnedData", "binnedData", RooArgSet(tau), h_signal) ;
   // Build exponential PDF,
   RooRealVar expoParam("expoParam", "expoParam", -5000, -5000, 0.) ;
-  //RooRealVar blindConst("blindConst", "blindConst", -50000., -10, 0.) ;
-  //RooUnblindOffset decayConstUnblind("decayConstUnblind", "Unblind decay rate", "someblindingstring", 0.0005, blindConst) ;
+  RooRealVar blindConst("blindConst", "blindConst", -5., -10, 0.) ;
+  RooUnblindOffset decayConstUnblind("decayConstUnblind", "Unblind decay rate", "someblindingstring", 0.0005, blindConst) ;
 
-  RooExponential lifetimePDF("lifetimePDF", "lifetimePDF", tau, expoParam) ; 
-  //RooExponential lifetimePDF("lifetimePDF", "lifetimePDF", tau, decayConstUnblind) ;
+  //RooExponential lifetimePDF("lifetimePDF", "lifetimePDF", tau, expoParam) ; 
+  RooExponential lifetimePDF("lifetimePDF", "lifetimePDF", tau, decayConstUnblind) ;
 
   // Fit to data
   lifetimePDF.fitTo(binnedData, RooFit::SumW2Error(false)) ;
 
   // print the blinded decay rate:
-  //cout << "Decay rate: " << blindConst.getVal() << " +/- " << blindConst.getError() << endl ;
+  cout << "Decay rate: " << blindConst.getVal() << " +/- " << blindConst.getError() << endl ;
 
   // Plot
   TCanvas c1;
@@ -54,8 +55,8 @@ void lifetimeFit()
 
   lifetimePlot->GetYaxis()->SetTitleOffset(1.4);
   lifetimePlot->Draw();  
-  // Save file as .png
-  c1.SaveAs("histo_Lambda_cplus_TAU_lifetime_SigOnly_FITTED.png") ;
+  // Save file as .pdf
+  c1.SaveAs("histo_Xi_cplus_TAU_lifetime_SigOnly_FITTED.pdf") ;
 
 }
 

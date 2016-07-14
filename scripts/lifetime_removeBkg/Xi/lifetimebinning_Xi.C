@@ -84,8 +84,8 @@ void binFit() {
   RooExponential expo_bkg("expo_bkg", "expo_bkg", Lambda_cplus_M, expoPar);
 
   // Model PDF.
-  RooRealVar nSignal("nSignal","nSignal", 23000, 0, 1500000);
-  RooRealVar nBkg("nBkg","nBkg", 13000, 0, 1500000);
+  RooRealVar nSignal("nSignal","nSignal", 23000, -1000, 1500000);
+  RooRealVar nBkg("nBkg","nBkg", 13000, -1000, 1500000);
   
   //RooAddPdf model("model","model",RooArgList(gauss, pol0),RooArgList(nSignal, pol0_yield));
   //RooAddPdf model("model","model",RooArgList(gauss, expo_bkg),RooArgList(nSignal, nBkg));

@@ -228,7 +228,7 @@ void binFit() {
   vis_lifetimePlot->Draw() ;
 
   c102->Update() ;
-  c102->SaveAs("visConf_cut01.png") ;
+  c102->SaveAs("visConf_cut01.pdf") ;
 
   // Print useful info to screen
 

@@ -36,7 +36,8 @@ void lifetimeFit()
   // Build exponential PDF,
   RooRealVar expoParam("expoParam", "expoParam", -5000., -5000., 0.) ;
   RooRealVar blindConst("blindConst", "blindConst", -5000., -5000., 0.) ;
-  RooUnblindOffset decayConstUnblind("decayConstUnblind", "Unblind decay rate", "someblindingstring", 0.0005, blindConst) ;
+  //RooUnblindOffset decayConstUnblind("decayConstUnblind", "Unblind decay rate", "someblindingstring", 0.0005, blindConst) ;
+  RooUnblindOffset decayConstUnblind("decayConstUnblind", "Unblind decay rate", "someblindingstring", 500, blindConst) ;
 
   //RooExponential lifetimePDF("lifetimePDF", "lifetimePDF", tau, expoParam) ; 
   RooExponential lifetimePDF("lifetimePDF", "lifetimePDF", tau, decayConstUnblind) ;
@@ -45,7 +46,7 @@ void lifetimeFit()
   lifetimePDF.fitTo(binnedData, RooFit::SumW2Error(false)) ;
 
   // print the blinded decay rate:
-  //cout << "Decay rate: " << blindConst.getVal() << " +/- " << blindConst.getError() << endl ;
+  cout << "Decay rate: " << blindConst.getVal() << " +/- " << blindConst.getError() << endl ;
 
   // Plot
   TCanvas c1;
@@ -56,7 +57,7 @@ void lifetimeFit()
   lifetimePlot->GetYaxis()->SetTitleOffset(1.4);
   lifetimePlot->Draw();  
   // Save file as .pdf
-  c1.SaveAs("histo_Lambda_cplus_TAU_lifetime_SigOnly_FITTED.pdf") ;
+  c1.SaveAs("histo_Lambda_cplus_TAU_lifetime_SigOnly_cut01FITTED.pdf") ;
 
 }
 

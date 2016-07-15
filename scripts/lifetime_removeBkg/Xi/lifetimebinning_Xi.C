@@ -67,7 +67,7 @@ void binFit() {
   double mass_peak = 2468 ;  // initial mean value for fit (from theory)
 
   RooRealVar gausMean1("gausMean1", "gausMean1",mass_peak, lowestM, highestM, "GeV") ;
-  RooRealVar sigma1("sigma1","sigma1", 6, 0, 50) ;
+  RooRealVar sigma1("sigma1","sigma1", 6, 0, 200) ;
   RooGaussian gauss1("gauss1","gauss1",Lambda_cplus_M, gausMean1, sigma1) ;
 
   RooRealVar gausMean2("gausMean2", "gausMean2",mass_peak, lowestM, highestM, "GeV") ;
@@ -77,8 +77,6 @@ void binFit() {
   RooRealVar nFrac("nFrac", "nFrac", 0.5, 0.0, 1.) ;
   RooAddPdf gaussComb("gaussComb","gaussComb", RooArgList(gauss1, gauss2), RooArgList(nFrac)) ;
 
-  //Lambda_cplus_TAU.setRange("R1",0.00018, 0.0012);
-   
   // Exponential PDF.
   RooRealVar expoPar("expoPar","expoPar", -0.0001, -1., 0.);
   RooExponential expo_bkg("expo_bkg", "expo_bkg", Lambda_cplus_M, expoPar);
@@ -87,9 +85,8 @@ void binFit() {
   RooRealVar nSignal("nSignal","nSignal", 23000, -1000, 1500000);
   RooRealVar nBkg("nBkg","nBkg", 13000, -1000, 1500000);
   
-  //RooAddPdf model("model","model",RooArgList(gauss, pol0),RooArgList(nSignal, pol0_yield));
-  //RooAddPdf model("model","model",RooArgList(gauss, expo_bkg),RooArgList(nSignal, nBkg));
-  RooAddPdf model("model","model",RooArgList(gaussComb, expo_bkg),RooArgList(nSignal, nBkg));
+  RooAddPdf model("model","model",RooArgList(gauss1, expo_bkg),RooArgList(nSignal, nBkg));
+  //RooAddPdf model("model","model",RooArgList(gaussComb, expo_bkg),RooArgList(nSignal, nBkg));
 
 
 

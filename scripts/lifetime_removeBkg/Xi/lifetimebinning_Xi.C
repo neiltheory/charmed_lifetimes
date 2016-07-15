@@ -56,7 +56,7 @@ void binFit() {
 
   // Define dataset and make cuts.
   //RooDataSet* ds = (RooDataSet*)datafile->Get("ds") ;
-  RooDataSet ds("ds","ds",RooArgSet(Lambda_cplus_TAU, Lambda_cplus_M, Lambda_cplus_IPCHI2_OWNPV, BDTG),Import(*mytree),Cut("(0.00025<Lambda_cplus_TAU)&&(Lambda_cplus_TAU<0.002)&&(Lambda_cplus_M<2520)&&(2420<Lambda_cplus_M)&&(0.1506<BDTG)&&(Lambda_cplus_IPCHI2_OWNPV<3)")) ;
+  RooDataSet ds("ds","ds",RooArgSet(Lambda_cplus_TAU, Lambda_cplus_M, Lambda_cplus_IPCHI2_OWNPV, BDTG),Import(*mytree),Cut("(0.00025<Lambda_cplus_TAU)&&(Lambda_cplus_TAU<0.002)&&(Lambda_cplus_M<2520)&&(2420<Lambda_cplus_M)&&(0.4250<BDTG)&&(Lambda_cplus_IPCHI2_OWNPV<3)")) ;  //NB (for Neil): cut01=0.1506<BDTG; cut02=0.4250<BDTG
 
 
   // Build probability density functions (PDFs).
@@ -193,9 +193,9 @@ void binFit() {
   // Create and fill histogram with signal yields and errors calculated 
   // from the fits made in the 'for' loop, above.
 
-  TFile hf("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/histoTAU_Xi_cplus_SigOnly_cut01.root", "RECREATE") ;
+  TFile hf("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/histoTAU_Xi_cplus_SigOnly_cut02.root", "RECREATE") ;
   h_Signal->Write() ;
-  cout<<"histogram written (/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/histoTAU_Xi_cplus_SigOnly_cut01.root)"<<endl ;
+  cout<<"histogram written (/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/histoTAU_Xi_cplus_SigOnly_cut02.root)"<<endl ;
   //h_Signal->Draw();
 
 
@@ -227,7 +227,7 @@ void binFit() {
   vis_lifetimePlot->Draw() ;
 
   c102->Update() ;
-  c102->SaveAs("visConfXi_cut01.pdf") ;
+  c102->SaveAs("visConfXi_cut02.pdf") ;
 
   // Print useful info to screen
 

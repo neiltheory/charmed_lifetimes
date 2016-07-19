@@ -85,6 +85,17 @@ void sWeigher() {
   // Fit model
   model.fitTo(*ds, Extended()) ;
 
+  RooPlot *fullDataFit = Lambda_cplus_M.frame(Title("TitleHolder")) ;
+  //ds.plotOn(frame,Binning(25)); //default is 100 bins
+  ds->plotOn(fullDataFit, Name("data"), MarkerColor(kBlack)) ;
+  ds->statOn(fullDataFit, Layout(0.65,0.88,0.2), What("N")) ; //NB Layout(xmin,xmax,ymax)
+  model.plotOn(fullDataFit, Name("Model"), DrawOption("L")) ;
+  model.plotOn(fullDataFit, Components(expo_bkg), LineStyle(kDashed)) ;
+  model.plotOn(fullDataFit, Components(gaussComb), LineStyle(kDashed)) ;
+  model.paramOn(fullDataFit,Layout(0.19, 0.45, 0.88)) ; //was 0.4
+  fullDataFit->getAttText()->SetTextSize(0.022) ;
+  fullDataFit->Draw() ;
+  //c1->SaveAs("tempTest.pdf") ;
   // Set model fit variables to constants (NOT COEFFs!) ; this is important for the sPlot function below.
   gausMean1.setConstant() ;
   gausMean2.setConstant() ;
@@ -132,20 +143,33 @@ void sWeigher() {
   double sigma = sigma1.getVal() ;
   double pm = 3.0*sigma ;
   double mean = gausMean1.getVal() ;
-  cout<<"Ntot:"<<Ntot<<" sigma:"<<sigma<<" pm:"<<pm<<" mean:"<<mean<<endl;
+  //cout<<"Ntot:"<<Ntot<<" sigma:"<<sigma<<" pm:"<<pm<<" mean:"<<mean<<endl;
   double R1Low = mean - pm ;
   double R1Hi = mean + pm ;
-  cout<<"what1"<<endl ;
+
   Lambda_cplus_M.setRange("R1", R1Low, R1Hi) ;
-  cout<<"what12"<<endl ;  
+  Lambda_cplus_M.setRange("Rtotal", 2216, 2240) ;
+
   RooAbsReal* bkg_integral = expo_bkg.createIntegral(Lambda_cplus_M, NormSet(Lambda_cplus_M),Range("R1"));  
-  cout<<"what123"<<endl ;
+  //RooAbsReal* bkg_integral = expo_bkg.createIntegral(Lambda_cplus_M, Range("R1"));  
   double bkg_integral_value = bkg_integral->getVal() ;
-  cout<<"what1234"<<endl ;
   cout<<"bkg_integral_value:"<<bkg_integral_value<<endl ;
-  //double R1Entries = expo_bkg.integral(R1Low,R1Hi) ; 
+
+  RooAbsReal* sig_integral = gaussComb.createIntegral(Lambda_cplus_M, NormSet(Lambda_cplus_M), Range("R1"));  
+  double sig_integral_value = sig_integral->getVal() ;
+  cout<<"sig_integral_value:"<<sig_integral_value<<endl ;
+
+  RooAbsReal* totalbkg_integral = expo_bkg.createIntegral(Lambda_cplus_M, Range("Rtotal"));  
+  double totalbkg_integral_value = totalbkg_integral->getVal() ;
+  cout<<"totalbkg_integral_value:"<<totalbkg_integral_value<<endl ;
+  
+  RooAbsReal* totalsig_integral = gaussComb.createIntegral(Lambda_cplus_M, Range("Rtotal"));  
+  double totalsig_integral_value = totalsig_integral->getVal() ;
+  cout<<"totalsig_integral_value:"<<totalsig_integral_value<<endl ;
+  
  
-  //cout<<"R1Entries:"<<R1Entries<<endl;
+
+
   //______________________________________________________________________________
   treefile.Close() ;
   cout<<endl<<"TTree file created..."<<endl ;

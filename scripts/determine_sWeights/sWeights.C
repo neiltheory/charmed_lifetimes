@@ -66,7 +66,7 @@ void sWeigher() {
   RooRealVar nFrac("nFrac", "nFrac", 0.5, 0.0, 1.) ;
   RooAddPdf gaussComb("gaussComb","gaussComb", RooArgList(gauss1, gauss2), RooArgList(nFrac)) ;
 
-  //Lambda_cplus_TAU.setRange("R1",0.00018, 0.0012);
+
    
   // Build exponential PDF; "expo_bkg"
   RooRealVar expoPar("expoPar","expoPar", -0.0001, -1., 0.);
@@ -85,7 +85,6 @@ void sWeigher() {
   // Fit model
   model.fitTo(*ds, Extended()) ;
 
-
   // Set model fit variables to constants (NOT COEFFs!) ; this is important for the sPlot function below.
   gausMean1.setConstant() ;
   gausMean2.setConstant() ;
@@ -93,6 +92,9 @@ void sWeigher() {
   sigma2.setConstant() ;
   nFrac.setConstant() ;
   expoPar.setConstant() ;
+
+
+
   
   //RooMsgService::instance().setSilentMode(true);
 
@@ -125,8 +127,31 @@ void sWeigher() {
   TTree& mystree = sTree.tree() ;
   mystree.SetBranchStatus("Lambda_cplus_M", 0) ; // you don't want to save the mass variables again.
   mystree.Write() ;
+  //______________________________________________________________________________
+  double Ntot = ds->numEntries() ;
+  double sigma = sigma1.getVal() ;
+  double pm = 3.0*sigma ;
+  double mean = gausMean1.getVal() ;
+  cout<<"Ntot:"<<Ntot<<" sigma:"<<sigma<<" pm:"<<pm<<" mean:"<<mean<<endl;
+  double R1Low = mean - pm ;
+  double R1Hi = mean + pm ;
+  cout<<"what1"<<endl ;
+  Lambda_cplus_M.setRange("R1", R1Low, R1Hi) ;
+  cout<<"what12"<<endl ;  
+  RooAbsReal* bkg_integral = expo_bkg.createIntegral(Lambda_cplus_M, NormSet(Lambda_cplus_M),Range("R1"));  
+  cout<<"what123"<<endl ;
+  double bkg_integral_value = bkg_integral->getVal() ;
+  cout<<"what1234"<<endl ;
+  cout<<"bkg_integral_value:"<<bkg_integral_value<<endl ;
+  //double R1Entries = expo_bkg.integral(R1Low,R1Hi) ; 
+ 
+  //cout<<"R1Entries:"<<R1Entries<<endl;
+  //______________________________________________________________________________
   treefile.Close() ;
   cout<<endl<<"TTree file created..."<<endl ;
+
+
+
 
   // Check the values of the yields and the 'yields' from the sWeight are the same
   cout<<endl<<"Yield of signal is: "<<nSignal.getVal()<<"; from sWeights it is: "
@@ -137,7 +162,8 @@ void sWeigher() {
   cout<<"nSignal + nBkg = "<<nSignal.getVal()<<" + "<<nBkg.getVal()<<" = "<<nSignal.getVal()+nBkg.getVal()<<endl;
   cout<<"^ This should match the number of events (below): "<<endl ;
   ds->Print() ;
-
+  cout<<"Ntot = "<<Ntot<<endl ;
+  //  cout<<"entries in R1 = "<<R1Entries<<endl ;
   cout<<"========== FIT INFO =========="<<endl ;
   cout<<"  Double Gaussian fit parameters to full data (signal + background):"<<endl;
   cout<<gausMean1<<endl ;

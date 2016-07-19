@@ -26,7 +26,8 @@ using namespace RooFit ;
 
 // Script opens a previously made .root file which contains a dataset type object which 
 // holds all events in preselected and appropriate ranges for variables of the 
-// Lambda_cplus particle.
+// Lambda_cplus particle. Script then attempts to remove background candidates, based on
+// weights determined by TMVA package, by making a cut on a TMVA output variable.
 
 
 void binFit() {

@@ -21,15 +21,12 @@ using namespace RooFit ;
 // Script opens a previously made ROOT file which contains a dataset type object (which is a reduced version 
 // of the full data, reduced but applying specific cuts in specfic variables) and calculates 'sWeights'.
 // sWeights are then saved to a 'dataset' .root file AND/OR to a TTree type ROOT file, along with their
-// original info.
+// original data.
 
 
 void sWeigher() {
 
-  //TFile *fullFile = TFile::Open("~/Documents/uni/LHCb_CharmSummerProj/learning_root/turbo_2015_data.root") ; // Opens full data.
-  TFile *fullFile = TFile::Open("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/run-II-data/turbo_2015_data.root") ; 
 
-  TTree* mytree = (TTree*) fullFile->Get("Lambda_cToKppiTuple/DecayTree;1") ;  
 
   //TFile *datafile = TFile::Open("~/Documents/uni/LHCb_CharmSummerProj/learning_root/turbo_M_TAU_cut01.root") ; // opens 'reduced' data.
   TFile *datafile = TFile::Open("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/turbo_M_TAU_cut01.root") ;  
@@ -117,7 +114,7 @@ void sWeigher() {
    TFile *dsWithWeights = TFile::Open("DataSet_Lambda_TAUmin200fs_max2200fs_Mmin2216_max2356_CutIPCHI2lt3_withWeights.root","RECREATE") ;
   ds->Write() ;
   dsWithWeights->Close() ;
-  cout<<endl<<"  Dataset type file (datafileLambda_TAUmin200fs_max2200fs_Mmin2216_max2356_CutIPCHI2lt3_withWeights.root) created in current directory..."<<endl ;
+  cout<<endl<<"  Dataset type file created in current directory..."<<endl ;
   */
 
   // Save OUTPUT TTree with sWeights

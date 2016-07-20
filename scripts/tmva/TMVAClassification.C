@@ -125,7 +125,7 @@ void TMVAClassification( TString myMethodList = "" )
    Use["SVM"]             = 0;
    // 
    // --- Boosted Decision Trees
-   Use["BDT"]             = 1; // uses Adaptive Boost
+   Use["BDT"]             = 0; // uses Adaptive Boost
    Use["BDTG"]            = 1; // uses Gradient Boost
    Use["BDTB"]            = 0; // uses Bagging
    Use["BDTD"]            = 0; // decorrelation + Adaptive Boost

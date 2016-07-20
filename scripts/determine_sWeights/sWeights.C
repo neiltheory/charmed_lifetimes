@@ -28,8 +28,8 @@ void sWeigher() {
 
 
 
-  //TFile *datafile = TFile::Open("~/Documents/uni/LHCb_CharmSummerProj/learning_root/turbo_M_TAU_cut01.root") ; // opens 'reduced' data.
-  TFile *datafile = TFile::Open("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/turbo_M_TAU_cut01.root") ;  
+  TFile *datafile = TFile::Open("~/Documents/uni/LHCb_CharmSummerProj/learning_root/turbo_M_TAU_cut01.root") ; // opens 'reduced' data.
+  //TFile *datafile = TFile::Open("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/turbo_M_TAU_cut01.root") ;  
 
 
   // Define dataset
@@ -97,8 +97,7 @@ void sWeigher() {
   model.plotOn(fullDataFit, Components(gaussComb), LineStyle(kDashed)) ;
   model.paramOn(fullDataFit,Layout(0.19, 0.45, 0.88)) ; //was 0.4
   fullDataFit->getAttText()->SetTextSize(0.022) ;
-  fullDataFit->Draw() ;
-  //c1->SaveAs("tempTest.pdf") ;
+
 
 
   // Set model fit variables to constants (NOT COEFFs!) ; this is important for the sPlot function below.
@@ -115,7 +114,6 @@ void sWeigher() {
   // Find signal and background yields in a sub range of the Lambda_cplus_M total range //
   //************************************************************************************//
 
-
   double Ntot = ds->numEntries() ;
   double sigma = sigma1.getVal() ;
   double pm = 3.0*sigma ;
@@ -123,30 +121,37 @@ void sWeigher() {
   double R1Low = mean - pm ;
   double R1Hi = mean + pm ;
 
-  cout<<"!!!!!!!!!!!!!  R1Low:"<<R1Low<<" R1Hi:"<<R1Hi<<endl ;
-  cout<<"!!!!!!!!!!!!!  Ntot:"<<Ntot<<" sigma:"<<sigma<<" pm:"<<pm<<" mean:"<<mean<<endl;
+  //cout<<"!!!!!!!!!!!!!  R1Low:"<<R1Low<<" R1Hi:"<<R1Hi<<endl ;
+  //cout<<"!!!!!!!!!!!!!  Ntot:"<<Ntot<<" sigma:"<<sigma<<" pm:"<<pm<<" mean:"<<mean<<endl;
 
   Lambda_cplus_M.setRange("R1", R1Low, R1Hi) ;
-  Lambda_cplus_M.setRange("Rtotal", 2216, 2356) ;
+  //Lambda_cplus_M.setRange("Rtotal", 2216, 2356) ;
 
   massArg = RooArgSet(Lambda_cplus_M) ;
-  RooAbsReal* bkg_integral = expo_bkg.createIntegral(massArg, NormSet(massArg),Range("R1"));  
+  RooAbsReal* bkg_integral = expo_bkg.createIntegral(massArg, NormSet(massArg), Range("R1"));  
   //RooAbsReal* bkg_integral = expo_bkg.createIntegral(Lambda_cplus_M, Range("R1"));  
   double bkg_integral_value = bkg_integral->getVal() ;
   cout<<"bkg_integral_value:"<<bkg_integral_value<<endl ;
 
-  RooAbsReal* sig_integral = gaussComb.createIntegral(massArg, NormSet(massArg),Range("R1"));  
+  RooAbsReal* sig_integral = gaussComb.createIntegral(massArg, NormSet(massArg), Range("R1"));  
   double sig_integral_value = sig_integral->getVal() ;
   cout<<"sig_integral_value:"<<sig_integral_value<<endl ;
 
-  RooAbsReal* totalbkg_integral = expo_bkg.createIntegral(Lambda_cplus_M, Range("Rtotal"));  
-  double totalbkg_integral_value = totalbkg_integral->getVal() ;
-  cout<<"totalbkg_integral_value:"<<totalbkg_integral_value<<endl ;
+  //RooAbsReal* totalbkg_integral = expo_bkg.createIntegral(massArg, NormSet(massArg), Range("Rtotal"));  
+  //double totalbkg_integral_value = totalbkg_integral->getVal() ;
+  //cout<<"totalbkg_integral_value:"<<totalbkg_integral_value<<endl ;
   
-  RooAbsReal* totalsig_integral = gaussComb.createIntegral(Lambda_cplus_M, Range("Rtotal"));  
-  double totalsig_integral_value = totalsig_integral->getVal() ;
-  cout<<"totalsig_integral_value:"<<totalsig_integral_value<<endl ;
-  
+  //RooAbsReal* totalsig_integral = gaussComb.createIntegral(massArg, NormSet(massArg), Range("Rtotal"));  
+  //double totalsig_integral_value = totalsig_integral->getVal() ;
+  //cout<<"totalsig_integral_value:"<<totalsig_integral_value<<endl ;
+
+ 
+  double R1sig = nSignal.getVal()*sig_integral_value ;
+  double R1bkg = nBkg.getVal()*bkg_integral_value ;
+  double R1tot = R1sig + R1bkg ; 
+
+  cout<<"!!!!!!!!!!!!! number of entries in 3sigma range of mean1 is: "<<R1tot<<endl ;
+  cout<<"!!!!!!!!!!!!! ...of which "<<R1sig<<" are signal and "<<R1bkg<<" are background."<<endl ;
   //************************************************************************************//
 
 
@@ -158,16 +163,6 @@ void sWeigher() {
   // Create and record sWeights
   RooStats::SPlot* sDataM = new RooStats::SPlot("sData", "An SPlot", *ds, &model, RooArgList(nSignal, nBkg)) ;
 
- /*
-//To Check...
-  for (Int_t i=90; i < 100; i++){
-    cout << "nSignal: "<<sDataM->GetSWeight(i,"nSignal")
-	 << ", nBkg: "<<sDataM->GetSWeight(i,"nBkg")
-	 << ", Total Weight: "<<sDataM->GetSumOfEventSWeight(i) // Should be total = 1 (always!)
-	 << endl;
-  }
-  */
-
   /*
   // Save dataset with sWeights
    TFile *dsWithWeights = TFile::Open("DataSet_Lambda_TAUmin200fs_max2200fs_Mmin2216_max2356_CutIPCHI2lt3_withWeights.root","RECREATE") ;
@@ -177,78 +172,43 @@ void sWeigher() {
   */
 
   // Save OUTPUT TTree with sWeights
-  //TFile treefile("sTree.root", "recreate") ;
-  //TFile treefile("~/Documents/uni/LHCb_CharmSummerProj/learning_root/sWeightsTree_M_TAU_cut01.root", "recreate") ;
   TFile treefile("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/sWeightsTree_M_TAU_cut01.root", "recreate") ;
   RooTreeDataStore sTree("sTree", "sTree", *ds->get(0), *ds->store()) ;
   TTree& mystree = sTree.tree() ;
-  mystree.SetBranchStatus("Lambda_cplus_M", 0) ; // you don't want to save the mass variables again.
+  mystree.SetBranchStatus("Lambda_cplus_M", 0) ; // don't want to save the mass variables again.
   mystree.Write() ;
-  //************************************************************************************//
-  // Find number of entries in a range
-  //RooDataSet ds2("ds2","ds2",RooArgSet(Lambda_cplus_TAU, Lambda_cplus_M),Import(mystree),Cut("(0.00025<Lambda_cplus_TAU)&&(Lambda_cplus_TAU<0.002)&&(Lambda_cplus_M<R1Hi)&&(R1Low<Lambda_cplus_M)")) ;
-
-
-  //double NR1 = ds2.numEntries() ;
-  //cout<<"!!!!!!!!!!!!! number of entries in 3sigma range of mean is: "<<NR1<<endl;
-
-
-
-  //************************************************************************************//
   treefile.Close() ;
-  cout<<endl<<"TTree file created..."<<endl ;
-  
 
 
-
-  // Check the values of the yields and the 'yields' from the sWeight are the same
-  cout<<endl<<"Yield of signal is: "<<nSignal.getVal()<<"; from sWeights it is: "
-      <<sDataM->GetYieldFromSWeight("nSignal")<<endl ;
-  cout<<"Yield of background is: "<<nBkg.getVal()<<"; from sWeights it is: "
-      <<sDataM->GetYieldFromSWeight("nBkg")<<endl ;
-  cout<<"^ These should match..."<<endl<<endl ;
-  cout<<"nSignal + nBkg = "<<nSignal.getVal()<<" + "<<nBkg.getVal()<<" = "<<nSignal.getVal()+nBkg.getVal()<<endl;
-  cout<<"^ This should match the number of events (below): "<<endl ;
-  ds->Print() ;
-  cout<<"Ntot = "<<Ntot<<endl ;
-  //  cout<<"entries in R1 = "<<R1Entries<<endl ;
-  cout<<"========== FIT INFO =========="<<endl ;
-  cout<<"  Double Gaussian fit parameters to full data (signal + background):"<<endl;
+  // Print info to screen
+  cout<<endl<<endl<<"========== ROOFIT INFO ==========="<<endl ;
+  cout<<":::Double Gaussian fit parameters to full data (signal + background):"<<endl;
   cout<<gausMean1<<endl ;
   cout<<gausMean2<<endl ;
   cout<<sigma1<<endl ;
   cout<<sigma2<<endl ;
-  cout<<nFrac<<endl ;
-  cout<<"  Exponential fit parameters to full data (signal + background):"<<endl;
-  cout<<expoPar<<endl<<endl ;
+  cout<<nFrac<<endl<<endl ;
+  cout<<":::Exponential fit parameters to full data (signal + background):"<<endl;
+  cout<<expoPar<<endl<<endl<<endl ;
+  cout<<"========== Signal and Background yields INFO ========"<<endl ;
+  // Check the values of the yields from the fit and the yields from the sWeight are the same
+  cout<<"1) Yield of signal is: "<<nSignal.getVal()<<"; from sWeights it is: "
+      <<sDataM->GetYieldFromSWeight("nSignal")<<" ...these should match."<<endl ;
+  cout<<"2) Yield of background is: "<<nBkg.getVal()<<"; from sWeights it is: "
+      <<sDataM->GetYieldFromSWeight("nBkg")<<" ...these should match."<<endl ;
+  cout<<"3) Number of entries in 3*sigma range of mean1 is: "<<R1tot<<endl ;
+  cout<<"   ...of which "<<R1sig<<" are signal and "<<R1bkg<<" are background."<<endl ;
+  // Check to see if total events is the same..
+  //cout<<"nSignal + nBkg = "<<nSignal.getVal()<<" + "<<nBkg.getVal()<<" = "<<nSignal.getVal()+nBkg.getVal()<<endl;
+  //cout<<"^ This should match the number of events (below): "<<endl ;
+  //ds->Print() ;
+  cout<<"========== INFO: END ========"<<endl<<endl<<endl ;
 
-
-  cout<<"highestM = "<<highestM<<endl;
-  cout<<"lowestM = "<<lowestM<<endl;
-  cout<<"highestTAU = "<<highestTAU<<endl;
-  cout<<"lowestTAU = "<<lowestTAU<<endl;
-  // VISUAL CHECK: check the fit is correct, plot the fitted model on the data
-  /*
-  // Plot =================================================
-  RooPlot *fullDataFit = Lambda_cplus_M.frame(Title("SignalAndBkg"));
-   ds->plotOn(fullDataFit, Name("data"), MarkerColor(kBlack)) ;
-  ds->statOn(fullDataFit, Layout(0.65,0.88,0.2), What("N")) ; //NB Layout(xmin,xmax,ymax)
-  model.plotOn(fullDataFit, Name("Model"), DrawOption("L")) ;
-  model.plotOn(fullDataFit, Components(expo_bkg), LineStyle(kDashed)) ;
-  model.paramOn(fullDataFit,Layout(0.19, 0.45, 0.88)) ; //was 0.4
-  fullDataFit->getAttText()->SetTextSize(0.022) ;
-
-  // Draw =================================================
-  TCanvas *c102 = new TCanvas("c102","",600,900) ;
-  //formatCanvas4(c102) ;
-
+  // Save canvas
+  TCanvas *c2 = new TCanvas("c2","",900,600) ;
   gStyle->SetOptStat("") ;
-  
-  c102->cd() ;
   fullDataFit->Draw() ;
-  c102->Update() ;  
-  c102->Print("SignalAndBkg01.pdf");
-  // ======================================================
-  */
+  c2->Print("SignalAndBkg01.pdf");
+
 }
 

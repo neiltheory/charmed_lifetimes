@@ -85,18 +85,28 @@ void sWeigher() {
 
   // Fit model
   model.fitTo(*ds, Extended()) ;
+  params = RooArgSet(gausMean1, gausMean2, sigma1, sigma2, nFrac) ;
 
 
-
-  RooPlot *fullDataFit = Lambda_cplus_M.frame(Title("TitleHolder")) ;
-  //ds.plotOn(frame,Binning(25)); //default is 100 bins
+  // Plot
+  RooPlot *fullDataFit = Lambda_cplus_M.frame(Title(" ")) ;
+  //ds->plotOn(fullDataFit, Binning(50)) ; //default is 100 bins
   ds->plotOn(fullDataFit, Name("data"), MarkerColor(kBlack)) ;
   ds->statOn(fullDataFit, Layout(0.65,0.88,0.2), What("N")) ; //NB Layout(xmin,xmax,ymax)
   model.plotOn(fullDataFit, Name("Model"), DrawOption("L")) ;
   model.plotOn(fullDataFit, Components(expo_bkg), LineStyle(kDashed)) ;
   model.plotOn(fullDataFit, Components(gaussComb), LineStyle(kDashed)) ;
-  model.paramOn(fullDataFit,Layout(0.19, 0.45, 0.88)) ; //was 0.4
-  fullDataFit->getAttText()->SetTextSize(0.022) ;
+  //model.paramOn(fullDataFit,Layout(0.19, 0.45, 0.88)) ;
+  //model.paramOn(fullDataFit,Layout(0.19, 0.4, 0.88)) ;
+  //model.paramOn(fullDataFit,Layout(0.18, 0.41, 0.88)) ;
+  model.paramOn(fullDataFit,Layout(0.15, 0.41, 0.88), Parameters(params)) ;
+  
+
+  fullDataFit->getAttText()->SetTextSize(0.028) ; //was 0.025, then 0.03, then 0.027
+  fullDataFit->SetXTitle("Mass (GeV)") ;
+  fullDataFit->SetYTitle("Number of Events") ;
+  fullDataFit->SetTitleOffset(1.3,"Y") ; //was 0.01, then 0.08, then 1.1
+  fullDataFit->SetTitleOffset(1.3,"X") ; //was 1.01, then 1.1 
 
 
 
@@ -150,8 +160,8 @@ void sWeigher() {
   double R1bkg = nBkg.getVal()*bkg_integral_value ;
   double R1tot = R1sig + R1bkg ; 
 
-  cout<<"!!!!!!!!!!!!! number of entries in 3sigma range of mean1 is: "<<R1tot<<endl ;
-  cout<<"!!!!!!!!!!!!! ...of which "<<R1sig<<" are signal and "<<R1bkg<<" are background."<<endl ;
+  //cout<<"!!!!!!!!!!!!! number of entries in 3sigma range of mean1 is: "<<R1tot<<endl ;
+  //cout<<"!!!!!!!!!!!!! ...of which "<<R1sig<<" are signal and "<<R1bkg<<" are background."<<endl ;
   //************************************************************************************//
 
 
@@ -170,7 +180,7 @@ void sWeigher() {
   dsWithWeights->Close() ;
   cout<<endl<<"  Dataset type file created in current directory..."<<endl ;
   */
-
+  /*
   // Save OUTPUT TTree with sWeights
   TFile treefile("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/sWeightsTree_M_TAU_cut01.root", "recreate") ;
   RooTreeDataStore sTree("sTree", "sTree", *ds->get(0), *ds->store()) ;
@@ -178,10 +188,10 @@ void sWeigher() {
   mystree.SetBranchStatus("Lambda_cplus_M", 0) ; // don't want to save the mass variables again.
   mystree.Write() ;
   treefile.Close() ;
-
+  */
 
   // Print info to screen
-  cout<<endl<<endl<<"========== ROOFIT INFO ==========="<<endl ;
+  cout<<endl<<endl<<"========== ROOFIT INFO ==========="<<endl<<endl ;
   cout<<":::Double Gaussian fit parameters to full data (signal + background):"<<endl;
   cout<<gausMean1<<endl ;
   cout<<gausMean2<<endl ;
@@ -206,9 +216,9 @@ void sWeigher() {
 
   // Save canvas
   TCanvas *c2 = new TCanvas("c2","",900,600) ;
-  gStyle->SetOptStat("") ;
+  //gStyle->SetOptStat("") ; // on in 02
   fullDataFit->Draw() ;
-  c2->Print("SignalAndBkg01.pdf");
+  c2->Print("SignalAndBkg05.pdf");
 
 }
 

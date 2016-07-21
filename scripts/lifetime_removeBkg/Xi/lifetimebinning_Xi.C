@@ -103,11 +103,6 @@ void binFit() {
   ds.plotOn(fullDataFit, Name("data"), MarkerColor(kBlack)) ;
   ds.statOn(fullDataFit, Layout(0.65,0.88,0.2), What("N")) ; //NB Layout(xmin,xmax,ymax)
   model.plotOn(fullDataFit, Name("Model"), DrawOption("L")) ;
-  model.plotOn(fullDataFit, Components(expo_bkg), LineStyle(kDashed)) ;
-  model.paramOn(fullDataFit,Layout(0.19, 0.45, 0.88)) ; //was 0.4
-  fullDataFit->getAttText()->SetTextSize(0.022) ;
-
-
 
   // Plot the residuals and Pulls...
   //______________________________________________________
@@ -127,6 +122,12 @@ void binFit() {
   c2->cd(2) ; gPad->SetLeftMargin(0.15) ; frame3->GetYaxis()->SetTitleOffset(1.6) ; frame3->Draw() ;
   c2->SaveAs("res_pull_xi_cut04__20bins_snglgaus.pdf") ;
   //______________________________________________________
+
+  model.plotOn(fullDataFit, Components(expo_bkg), LineStyle(kDashed)) ;
+  model.paramOn(fullDataFit,Layout(0.19, 0.45, 0.88)) ; //was 0.4
+  fullDataFit->getAttText()->SetTextSize(0.022) ;
+
+
 
 
 

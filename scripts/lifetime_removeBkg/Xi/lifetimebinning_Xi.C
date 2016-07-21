@@ -57,7 +57,7 @@ void binFit() {
 
   // Define dataset and make cuts.
   //RooDataSet* ds = (RooDataSet*)datafile->Get("ds") ;
-  RooDataSet ds("ds","ds",RooArgSet(Lambda_cplus_TAU, Lambda_cplus_M, Lambda_cplus_IPCHI2_OWNPV, BDTG),Import(*mytree),Cut("(0.00025<Lambda_cplus_TAU)&&(Lambda_cplus_TAU<0.002)&&(Lambda_cplus_M<2520)&&(2420<Lambda_cplus_M)&&(0.4250<BDTG)&&(Lambda_cplus_IPCHI2_OWNPV<3)")) ;  //NB (for Neil): cut01=0.1506<BDTG; cut02=0.4250<BDTG
+  RooDataSet ds("ds","ds",RooArgSet(Lambda_cplus_TAU, Lambda_cplus_M, Lambda_cplus_IPCHI2_OWNPV, BDTG),Import(*mytree),Cut("(0.00025<Lambda_cplus_TAU)&&(Lambda_cplus_TAU<0.002)&&(Lambda_cplus_M<2520)&&(2420<Lambda_cplus_M)&&(0.3541<BDTG)&&(Lambda_cplus_IPCHI2_OWNPV<3)")) ;  //NB (for Neil): cut01=0.1506<BDTG; cut02=0.4250<BDTG; cut04=0.3541
 
 
   // Build probability density functions (PDFs).
@@ -92,12 +92,7 @@ void binFit() {
 
 
   // Fit model PDF to data.
-  //model.fitTo(*ds, Range("R1"));
-  //expo1.fitTo(*ds, Range("R1"));
   model.fitTo(ds, Extended()) ;
-  //RooFitResult* rmodel = model.fitTo(*ds,Save()) ;
-  //RooFitResult* rexpo_bkg = expo_bkg.fitTo(*ds,Save());
-
 
 
   // Plot the data and the fit (not necesary, but provides a vidual confirmation that
@@ -111,6 +106,29 @@ void binFit() {
   model.plotOn(fullDataFit, Components(expo_bkg), LineStyle(kDashed)) ;
   model.paramOn(fullDataFit,Layout(0.19, 0.45, 0.88)) ; //was 0.4
   fullDataFit->getAttText()->SetTextSize(0.022) ;
+
+
+
+  // Plot the residuals and Pulls...
+  //______________________________________________________
+
+  RooHist* hresid = fullDataFit->residHist() ;
+  RooHist* hpull = fullDataFit->pullHist() ;
+
+  RooPlot* frame2 = Lambda_cplus_M.frame(Title("Residual Distribution")) ;
+  frame2->addPlotable(hresid,"P") ;
+
+  RooPlot* frame3 = Lambda_cplus_M.frame(Title("Pull Distribution")) ;
+  frame3->addPlotable(hpull,"P") ;
+
+  TCanvas* c2 = new TCanvas("chi2residuals", "chi2residuals", 600,300) ;
+  c2->Divide(2) ;
+  c2->cd(1) ; gPad->SetLeftMargin(0.15) ; frame2->GetYaxis()->SetTitleOffset(1.6) ; frame2->Draw() ;
+  c2->cd(2) ; gPad->SetLeftMargin(0.15) ; frame3->GetYaxis()->SetTitleOffset(1.6) ; frame3->Draw() ;
+  c2->SaveAs("res_pull_xi_cut04__20bins_snglgaus.pdf") ;
+  //______________________________________________________
+
+
 
   /*
   RooDataHist hist4Chi2("hist4Chi2","hist4Chi2", RooArgSet(Lambda_cplus_M), ds) ;
@@ -128,14 +146,14 @@ void binFit() {
 
 
   // Create array of signal candidates in TAU variable.
-  int nBins=10 ;      // If you change this, rememeber to change array sizes below!
+  int nBins=20 ;      // If you change this, rememeber to change (*) array sizes and (**) h_signal histogram bin declaration below!
   
 
 
   // Create arrays to store signal yield and error for each bin. 
-  double signalYield[10] ;
-  double signalError[10] ;
-  double binCent[10] ;      // to record centre of bin.
+  double signalYield[20] ;  // (*)
+  double signalError[20] ;
+  double binCent[20] ;      // to record centre of bin.
 
   // Split data into 'TAU' bins, make mass fits to individual bins and store signal 
   // yields in array.
@@ -176,7 +194,7 @@ void binFit() {
 
 }
 
-  TH1D *h_Signal = new TH1D("h_Signal","h_Signal",10 ,0.00025 ,0.002) ;
+  TH1D *h_Signal = new TH1D("h_Signal","h_Signal",20 ,0.00025 ,0.002) ; // (**)
   int j ;
   int tempnumber ;
   
@@ -191,9 +209,9 @@ void binFit() {
   // Create and fill histogram with signal yields and errors calculated 
   // from the fits made in the 'for' loop, above.
 
-  TFile hf("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/histoTAU_Xi_cplus_SigOnly_cut02.root", "RECREATE") ;
+  TFile hf("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/histoTAU_Xi_cplus_SigOnly_cut04_20bins_snglgaus.root", "RECREATE") ;
   h_Signal->Write() ;
-  cout<<"histogram written (/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/histoTAU_Xi_cplus_SigOnly_cut02.root)"<<endl ;
+  cout<<"histogram written..."<<endl ;
   //h_Signal->Draw();
 
 
@@ -212,6 +230,12 @@ void binFit() {
   vis_lifetimePDF.plotOn(vis_lifetimePlot) ;
 
 
+
+
+
+
+
+
   TCanvas *c102 = new TCanvas("c102","",600,900) ;
   formatCanvas4(c102) ;
 
@@ -225,12 +249,12 @@ void binFit() {
   vis_lifetimePlot->Draw() ;
 
   c102->Update() ;
-  c102->SaveAs("visConfXi_cut02.pdf") ;
+  c102->SaveAs("visConfXi_cut04_20bins_snglgaus.pdf") ;
 
   // Print useful info to screen
 
   cout<<endl<<"   ************info************"<<endl<<endl;
-  
+  cout<<"  Fit Quality>>> chi2 = "<< fullDataFit->chiSquare() << endl ;  
   cout<<"Double Gaussian fit parameters to full data (signal + background):"<<endl;
   cout<<"  "<<gausMean1<<endl ;
   cout<<"  "<<gausMean2<<endl ;
@@ -247,7 +271,7 @@ void binFit() {
     cout<<"Bin number "<<k+1<<" (bin centre = "<<binCent[k]*1000<<"ps):"<<endl;
     cout<<"   "<<"signal yield = "<<signalYield[k]<<endl ;
     cout<<"   "<<"signal error = "<<signalError[k]<<endl ;
-  };
+  }
  
 
     /*

@@ -1,0 +1,723 @@
+
+Processing TMVAClassification.C...
+
+==> Start TMVAClassification
+--- Factory                  : You are running ROOT Version: 5.34/26, Feb 20, 2015
+--- Factory                  : 
+--- Factory                  : _/_/_/_/_/ _|      _|  _|      _|    _|_|   
+--- Factory                  :    _/      _|_|  _|_|  _|      _|  _|    _| 
+--- Factory                  :   _/       _|  _|  _|  _|      _|  _|_|_|_| 
+--- Factory                  :  _/        _|      _|    _|  _|    _|    _| 
+--- Factory                  : _/         _|      _|      _|      _|    _| 
+--- Factory                  : 
+--- Factory                  : ___________TMVA Version 4.2.0, Sep 19, 2013
+--- Factory                  : 
+--- TMVAClassification       : Using input file: /afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/strippedToFitData_M_TAU_cut01_wAngVars_wSWeights01.root
+--- DataSetInfo              : Added class "Signal"	 with internal class number 0
+--- Factory                  : Add Tree DecayTree of type Signal with 287143 events
+--- DataSetInfo              : Added class "Background"	 with internal class number 1
+--- Factory                  : Add Tree DecayTree of type Background with 287143 events
+--- Factory                  : Preparing trees for training and testing...
+--- Factory                  : Booking method: [1mBDTG[0m
+[1;31m--- <WARNING> BDTG                     : the option *InverseBoostNegWeights* does not exist for BoostType=Grad --> change to *IgnoreNegWeightsInTraining*[0m
+--- DataSetFactory           : Splitmode is: "RANDOM" the mixmode is: "SAMEASSPLITMODE"
+--- DataSetFactory           : Create training and testing trees -- looping over class "Signal" ...
+--- DataSetFactory           : Weight expression for class 'Signal': "nSignal_sw"
+--- DataSetFactory           : Create training and testing trees -- looping over class "Background" ...
+--- DataSetFactory           : Weight expression for class 'Background': "nBkg_sw"
+--- DataSetFactory           : Number of events in input trees (after possible flattening of arrays):
+--- DataSetFactory           :     Signal          -- number of events       : 287143  / sum of weights: 61436.2
+--- DataSetFactory           :     Background      -- number of events       : 287143  / sum of weights: 225721
+--- DataSetFactory           :     Signal     tree -- total number of entries: 287143
+--- DataSetFactory           :     Background tree -- total number of entries: 287143
+--- DataSetFactory           : Preselection: (will NOT affect number of requested training and testing events)
+--- DataSetFactory           :     No preselection cuts applied on event classes
+--- DataSetFactory           : Weight renormalisation mode: "NumEvents": renormalises all event classes 
+--- DataSetFactory           :  such that the effective (weighted) number of events in each class equals the respective 
+--- DataSetFactory           :  number of events (entries) that you demanded in PrepareTrainingAndTestTree("","nTrain_Signal=.. )
+--- DataSetFactory           :  ... i.e. such that Sum[i=1..N_j]{w_i} = N_j, j=0,1,2...
+--- DataSetFactory           :  ... (note that N_j is the sum of TRAINING events (nTrain_j...with j=Signal,Background..
+--- DataSetFactory           :  ..... Testing events are not renormalised nor included in the renormalisation factor! )
+--- DataSetFactory           : --> Rescale Signal     event weights by factor: 4.6762
+--- DataSetFactory           : --> Rescale Background event weights by factor: 1.27332
+--- DataSetFactory           : Number of training and testing events after rescaling:
+--- DataSetFactory           : ------------------------------------------------------
+--- DataSetFactory           : Signal     -- training events            : 143571 (sum of weights: 143571) - requested were 0 events
+--- DataSetFactory           : Signal     -- testing events             : 143571 (sum of weights: 30739) - requested were 0 events
+--- DataSetFactory           : Signal     -- training and testing events: 287142 (sum of weights: 174310)
+--- DataSetFactory           : Background -- training events            : 143571 (sum of weights: 143571) - requested were 0 events
+--- DataSetFactory           : Background -- testing events             : 143571 (sum of weights: 112947) - requested were 0 events
+--- DataSetFactory           : Background -- training and testing events: 287142 (sum of weights: 256518)
+--- DataSetFactory           : Create internal training tree
+--- DataSetFactory           : Create internal testing tree
+--- DataSetInfo              : Correlation matrix (Signal):
+--- DataSetInfo              : -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--- DataSetInfo              :                              proton_LcRest_costheta proton_LcRest_cosphi Lambdac_LcRest_thetah1h2 piplus_TRACK_GhostProb pplus_TRACK_GhostProb Kminus_TRACK_GhostProb Lambda_cplus_ENDVERTEX_CHI2 Lambda_cplus_P Lambda_cplus_PT Kminus_P Kminus_PT pplus_P pplus_PT piplus_P piplus_PT Kminus_PIDK piplus_PIDK pplus_PIDK pplus_PIDp pplus_PIDp-pplus_PIDK
+--- DataSetInfo              :      proton_LcRest_costheta:                 +1.000               +0.004                   -0.001                 +0.003                +0.005                 +0.011                      -0.004         -0.003          -0.001   -0.003    -0.001  +0.000   +0.000   -0.005    +0.000      +0.003      +0.012     -0.005     -0.012                -0.009
+--- DataSetInfo              :        proton_LcRest_cosphi:                 +0.004               +1.000                   -0.011                 +0.005                -0.031                 +0.035                      -0.024         -0.002          +0.018   -0.300    -0.317  +0.399   +0.510   -0.281    -0.317      -0.072      +0.017     -0.114     +0.167                +0.237
+--- DataSetInfo              :    Lambdac_LcRest_thetah1h2:                 -0.001               -0.011                   +1.000                 -0.008                +0.015                 -0.007                      -0.002         -0.010          -0.014   +0.003    +0.001  -0.016   -0.014   -0.006    -0.012      -0.004      +0.004     -0.007     -0.004                -0.000
+--- DataSetInfo              :      piplus_TRACK_GhostProb:                 +0.003               +0.005                   -0.008                 +1.000                +0.014                 +0.015                      +0.075         -0.070          +0.035   -0.023    +0.056  -0.061   +0.025   -0.070    -0.016      -0.020      +0.064     +0.009     -0.030                -0.036
+--- DataSetInfo              :       pplus_TRACK_GhostProb:                 +0.005               -0.031                   +0.015                 +0.014                +1.000                 +0.020                      +0.125         -0.052          +0.045   -0.010    +0.056  -0.064   +0.007   -0.032    +0.031      -0.014      +0.009     -0.026     -0.073                -0.060
+--- DataSetInfo              :      Kminus_TRACK_GhostProb:                 +0.011               +0.035                   -0.007                 +0.015                +0.020                 +1.000                      +0.050         -0.082          +0.031   -0.105    -0.026  -0.055   +0.046   -0.038    +0.031      -0.051      +0.018     -0.013     -0.029                -0.023
+--- DataSetInfo              : Lambda_cplus_ENDVERTEX_CHI2:                 -0.004               -0.024                   -0.002                 +0.075                +0.125                 +0.050                      +1.000         -0.055          +0.106   -0.030    +0.074  -0.068   +0.058   -0.017    +0.075      -0.023      -0.003     -0.010     -0.040                -0.035
+--- DataSetInfo              :              Lambda_cplus_P:                 -0.003               -0.002                   -0.010                 -0.070                -0.052                 -0.082                      -0.055         +1.000          +0.234   +0.686    +0.076  +0.855   +0.175   +0.713    +0.186      -0.167      +0.248     -0.206     -0.111                +0.004
+--- DataSetInfo              :             Lambda_cplus_PT:                 -0.001               +0.018                   -0.014                 +0.035                +0.045                 +0.031                      +0.106         +0.234          +1.000   +0.171    +0.585  +0.221   +0.758   +0.131    +0.509      +0.044      +0.001     -0.082     +0.058                +0.107
+--- DataSetInfo              :                    Kminus_P:                 -0.003               -0.300                   +0.003                 -0.023                -0.010                 -0.105                      -0.030         +0.686          +0.171   +1.000    +0.558  +0.414   -0.074   +0.256    -0.118      -0.090      +0.174     -0.128     -0.101                -0.030
+--- DataSetInfo              :                   Kminus_PT:                 -0.001               -0.317                   +0.001                 +0.056                +0.056                 -0.026                      +0.074         +0.076          +0.585   +0.558    +1.000  -0.091   +0.176   -0.180    -0.027      +0.151      +0.037     -0.001     -0.027                -0.027
+--- DataSetInfo              :                     pplus_P:                 +0.000               +0.399                   -0.016                 -0.061                -0.064                 -0.055                      -0.068         +0.855          +0.221   +0.414    -0.091  +1.000   +0.448   +0.399    -0.038      -0.148      +0.200     -0.207     -0.056                +0.062
+--- DataSetInfo              :                    pplus_PT:                 +0.000               +0.510                   -0.014                 +0.025                +0.007                 +0.046                      +0.058         +0.175          +0.758   -0.074    +0.176  +0.448   +1.000   -0.109    +0.089      -0.009      +0.028     -0.119     +0.152                +0.224
+--- DataSetInfo              :                    piplus_P:                 -0.005               -0.281                   -0.006                 -0.070                -0.032                 -0.038                      -0.017         +0.713          +0.131   +0.256    -0.180  +0.399   -0.109   +1.000    +0.615      -0.133      +0.190     -0.118     -0.111                -0.046
+--- DataSetInfo              :                   piplus_PT:                 +0.000               -0.317                   -0.012                 -0.016                +0.031                 +0.031                      +0.075         +0.186          +0.509   -0.118    -0.027  -0.038   +0.089   +0.615    +1.000      -0.048      -0.075     -0.014     -0.053                -0.047
+--- DataSetInfo              :                 Kminus_PIDK:                 +0.003               -0.072                   -0.004                 -0.020                -0.014                 -0.051                      -0.023         -0.167          +0.044   -0.090    +0.151  -0.148   -0.009   -0.133    -0.048      +1.000      -0.160     +0.090     +0.177                +0.130
+--- DataSetInfo              :                 piplus_PIDK:                 +0.012               +0.017                   +0.004                 +0.064                +0.009                 +0.018                      -0.003         +0.248          +0.001   +0.174    +0.037  +0.200   +0.028   +0.190    -0.075      -0.160      +1.000     -0.133     -0.198                -0.127
+--- DataSetInfo              :                  pplus_PIDK:                 -0.005               -0.114                   -0.007                 +0.009                -0.026                 -0.013                      -0.010         -0.206          -0.082   -0.128    -0.001  -0.207   -0.119   -0.118    -0.014      +0.090      -0.133     +1.000     +0.326                -0.240
+--- DataSetInfo              :                  pplus_PIDp:                 -0.012               +0.167                   -0.004                 -0.030                -0.073                 -0.029                      -0.040         -0.111          +0.058   -0.101    -0.027  -0.056   +0.152   -0.111    -0.053      +0.177      -0.198     +0.326     +1.000                +0.840
+--- DataSetInfo              :       pplus_PIDp-pplus_PIDK:                 -0.009               +0.237                   -0.000                 -0.036                -0.060                 -0.023                      -0.035         +0.004          +0.107   -0.030    -0.027  +0.062   +0.224   -0.046    -0.047      +0.130      -0.127     -0.240     +0.840                +1.000
+--- DataSetInfo              : -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--- DataSetInfo              : Correlation matrix (Background):
+--- DataSetInfo              : -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--- DataSetInfo              :                              proton_LcRest_costheta proton_LcRest_cosphi Lambdac_LcRest_thetah1h2 piplus_TRACK_GhostProb pplus_TRACK_GhostProb Kminus_TRACK_GhostProb Lambda_cplus_ENDVERTEX_CHI2 Lambda_cplus_P Lambda_cplus_PT Kminus_P Kminus_PT pplus_P pplus_PT piplus_P piplus_PT Kminus_PIDK piplus_PIDK pplus_PIDK pplus_PIDp pplus_PIDp-pplus_PIDK
+--- DataSetInfo              :      proton_LcRest_costheta:                 +1.000               +0.000                   +0.009                 -0.001                -0.002                 -0.003                      +0.002         -0.000          +0.000   +0.001    +0.004  +0.001   +0.002   -0.002    -0.007      +0.001      +0.000     +0.003     +0.003                +0.002
+--- DataSetInfo              :        proton_LcRest_cosphi:                 +0.000               +1.000                   -0.005                 -0.029                -0.062                 +0.041                      +0.080         -0.015          -0.022   -0.424    -0.447  +0.511   +0.699   -0.298    -0.385      -0.058      -0.022     -0.090     +0.210                +0.290
+--- DataSetInfo              :    Lambdac_LcRest_thetah1h2:                 +0.009               -0.005                   +1.000                 +0.003                +0.003                 -0.001                      -0.003         +0.000          +0.000   -0.000    -0.005  -0.004   -0.001   +0.005    +0.007      -0.007      +0.009     +0.000     -0.001                -0.002
+--- DataSetInfo              :      piplus_TRACK_GhostProb:                 -0.001               -0.029                   +0.003                 +1.000                +0.089                 +0.062                      -0.020         +0.008          +0.013   -0.026    -0.033  -0.022   -0.030   +0.063    +0.091      -0.061      +0.137     -0.034     -0.081                -0.064
+--- DataSetInfo              :       pplus_TRACK_GhostProb:                 -0.002               -0.062                   +0.003                 +0.089                +1.000                 +0.067                      -0.051         +0.034          +0.018   +0.009    -0.021  -0.014   -0.028   +0.081    +0.082      -0.058      +0.070     -0.042     -0.187                -0.172
+--- DataSetInfo              :      Kminus_TRACK_GhostProb:                 -0.003               +0.041                   -0.001                 +0.062                +0.067                 +1.000                      +0.004         -0.023          -0.012   -0.109    -0.095  +0.006   +0.023   +0.031    +0.055      -0.138      +0.060     -0.029     -0.067                -0.052
+--- DataSetInfo              : Lambda_cplus_ENDVERTEX_CHI2:                 +0.002               +0.080                   -0.003                 -0.020                -0.051                 +0.004                      +1.000         -0.095          -0.004   -0.054    +0.015  -0.023   +0.061   -0.130    -0.092      +0.032      -0.035     +0.026     +0.066                +0.053
+--- DataSetInfo              :              Lambda_cplus_P:                 -0.000               -0.015                   +0.000                 +0.008                +0.034                 -0.023                      -0.095         +1.000          +0.163   +0.570    -0.031  +0.777   +0.062   +0.730    +0.210      -0.155      +0.212     -0.214     -0.183                -0.048
+--- DataSetInfo              :             Lambda_cplus_PT:                 +0.000               -0.022                   +0.000                 +0.013                +0.018                 -0.012                      -0.004         +0.163          +1.000   +0.132    +0.456  +0.121   +0.537   +0.095    +0.412      +0.057      -0.048     -0.032     +0.042                +0.068
+--- DataSetInfo              :                    Kminus_P:                 +0.001               -0.424                   -0.000                 -0.026                +0.009                 -0.109                      -0.054         +0.570          +0.132   +1.000    +0.628  +0.165   -0.302   +0.204    -0.119      -0.056      +0.083     -0.078     -0.126                -0.082
+--- DataSetInfo              :                   Kminus_PT:                 +0.004               -0.447                   -0.005                 -0.033                -0.021                 -0.095                      +0.015         -0.031          +0.456   +0.628    +1.000  -0.286   -0.192   -0.229    -0.152      +0.170      -0.043     +0.085     -0.031                -0.093
+--- DataSetInfo              :                     pplus_P:                 +0.001               +0.511                   -0.004                 -0.022                -0.014                 +0.006                      -0.023         +0.777          +0.121   +0.165    -0.286  +1.000   +0.499   +0.319    -0.101      -0.124      +0.126     -0.200     -0.063                +0.072
+--- DataSetInfo              :                    pplus_PT:                 +0.002               +0.699                   -0.001                 -0.030                -0.028                 +0.023                      +0.061         +0.062          +0.537   -0.302    -0.192  +0.499   +1.000   -0.219    -0.159      -0.020      -0.033     -0.082     +0.213                +0.288
+--- DataSetInfo              :                    piplus_P:                 -0.002               -0.298                   +0.005                 +0.063                +0.081                 +0.031                      -0.130         +0.730          +0.095   +0.204    -0.229  +0.319   -0.219   +1.000    +0.660      -0.135      +0.230     -0.151     -0.210                -0.121
+--- DataSetInfo              :                   piplus_PT:                 -0.007               -0.385                   +0.007                 +0.091                +0.082                 +0.055                      -0.092         +0.210          +0.412   -0.119    -0.152  -0.101   -0.159   +0.660    +1.000      -0.069      +0.009     -0.043     -0.154                -0.136
+--- DataSetInfo              :                 Kminus_PIDK:                 +0.001               -0.058                   -0.007                 -0.061                -0.058                 -0.138                      +0.032         -0.155          +0.057   -0.056    +0.170  -0.124   -0.020   -0.135    -0.069      +1.000      -0.162     +0.106     +0.129                +0.065
+--- DataSetInfo              :                 piplus_PIDK:                 +0.000               -0.022                   +0.009                 +0.137                +0.070                 +0.060                      -0.035         +0.212          -0.048   +0.083    -0.043  +0.126   -0.033   +0.230    +0.009      -0.162      +1.000     -0.131     -0.208                -0.133
+--- DataSetInfo              :                  pplus_PIDK:                 +0.003               -0.090                   +0.000                 -0.034                -0.042                 -0.029                      +0.026         -0.214          -0.032   -0.078    +0.085  -0.200   -0.082   -0.151    -0.043      +0.106      -0.131     +1.000     +0.437                -0.229
+--- DataSetInfo              :                  pplus_PIDp:                 +0.003               +0.210                   -0.001                 -0.081                -0.187                 -0.067                      +0.066         -0.183          +0.042   -0.126    -0.031  -0.063   +0.213   -0.210    -0.154      +0.129      -0.208     +0.437     +1.000                +0.775
+--- DataSetInfo              :       pplus_PIDp-pplus_PIDK:                 +0.002               +0.290                   -0.002                 -0.064                -0.172                 -0.052                      +0.053         -0.048          +0.068   -0.082    -0.093  +0.072   +0.288   -0.121    -0.136      +0.065      -0.133     -0.229     +0.775                +1.000
+--- DataSetInfo              : -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+--- DataSetFactory           :  
+--- Factory                  : 
+--- Factory                  : current transformation string: 'I'
+--- Factory                  : Create Transformation "I" with events from all classes.
+--- Id                       : Transformation, Variable selection : 
+--- Id                       : Input : variable 'proton_LcRest_costheta' (index=0).   <---> Output : variable 'proton_LcRest_costheta' (index=0).
+--- Id                       : Input : variable 'proton_LcRest_cosphi' (index=1).   <---> Output : variable 'proton_LcRest_cosphi' (index=1).
+--- Id                       : Input : variable 'Lambdac_LcRest_thetah1h2' (index=2).   <---> Output : variable 'Lambdac_LcRest_thetah1h2' (index=2).
+--- Id                       : Input : variable 'piplus_TRACK_GhostProb' (index=3).   <---> Output : variable 'piplus_TRACK_GhostProb' (index=3).
+--- Id                       : Input : variable 'pplus_TRACK_GhostProb' (index=4).   <---> Output : variable 'pplus_TRACK_GhostProb' (index=4).
+--- Id                       : Input : variable 'Kminus_TRACK_GhostProb' (index=5).   <---> Output : variable 'Kminus_TRACK_GhostProb' (index=5).
+--- Id                       : Input : variable 'Lambda_cplus_ENDVERTEX_CHI2' (index=6).   <---> Output : variable 'Lambda_cplus_ENDVERTEX_CHI2' (index=6).
+--- Id                       : Input : variable 'Lambda_cplus_P' (index=7).   <---> Output : variable 'Lambda_cplus_P' (index=7).
+--- Id                       : Input : variable 'Lambda_cplus_PT' (index=8).   <---> Output : variable 'Lambda_cplus_PT' (index=8).
+--- Id                       : Input : variable 'Kminus_P' (index=9).   <---> Output : variable 'Kminus_P' (index=9).
+--- Id                       : Input : variable 'Kminus_PT' (index=10).   <---> Output : variable 'Kminus_PT' (index=10).
+--- Id                       : Input : variable 'pplus_P' (index=11).   <---> Output : variable 'pplus_P' (index=11).
+--- Id                       : Input : variable 'pplus_PT' (index=12).   <---> Output : variable 'pplus_PT' (index=12).
+--- Id                       : Input : variable 'piplus_P' (index=13).   <---> Output : variable 'piplus_P' (index=13).
+--- Id                       : Input : variable 'piplus_PT' (index=14).   <---> Output : variable 'piplus_PT' (index=14).
+--- Id                       : Input : variable 'Kminus_PIDK' (index=15).   <---> Output : variable 'Kminus_PIDK' (index=15).
+--- Id                       : Input : variable 'piplus_PIDK' (index=16).   <---> Output : variable 'piplus_PIDK' (index=16).
+--- Id                       : Input : variable 'pplus_PIDK' (index=17).   <---> Output : variable 'pplus_PIDK' (index=17).
+--- Id                       : Input : variable 'pplus_PIDp' (index=18).   <---> Output : variable 'pplus_PIDp' (index=18).
+--- Id                       : Input : variable 'pplus_PIDp-pplus_PIDK' (index=19).   <---> Output : variable 'pplus_PIDp-pplus_PIDK' (index=19).
+--- Factory                  : 
+--- Factory                  : current transformation string: 'D'
+--- Factory                  : Create Transformation "D" with events from all classes.
+--- Deco                     : Transformation, Variable selection : 
+--- Deco                     : Input : variable 'proton_LcRest_costheta' (index=0).   <---> Output : variable 'proton_LcRest_costheta' (index=0).
+--- Deco                     : Input : variable 'proton_LcRest_cosphi' (index=1).   <---> Output : variable 'proton_LcRest_cosphi' (index=1).
+--- Deco                     : Input : variable 'Lambdac_LcRest_thetah1h2' (index=2).   <---> Output : variable 'Lambdac_LcRest_thetah1h2' (index=2).
+--- Deco                     : Input : variable 'piplus_TRACK_GhostProb' (index=3).   <---> Output : variable 'piplus_TRACK_GhostProb' (index=3).
+--- Deco                     : Input : variable 'pplus_TRACK_GhostProb' (index=4).   <---> Output : variable 'pplus_TRACK_GhostProb' (index=4).
+--- Deco                     : Input : variable 'Kminus_TRACK_GhostProb' (index=5).   <---> Output : variable 'Kminus_TRACK_GhostProb' (index=5).
+--- Deco                     : Input : variable 'Lambda_cplus_ENDVERTEX_CHI2' (index=6).   <---> Output : variable 'Lambda_cplus_ENDVERTEX_CHI2' (index=6).
+--- Deco                     : Input : variable 'Lambda_cplus_P' (index=7).   <---> Output : variable 'Lambda_cplus_P' (index=7).
+--- Deco                     : Input : variable 'Lambda_cplus_PT' (index=8).   <---> Output : variable 'Lambda_cplus_PT' (index=8).
+--- Deco                     : Input : variable 'Kminus_P' (index=9).   <---> Output : variable 'Kminus_P' (index=9).
+--- Deco                     : Input : variable 'Kminus_PT' (index=10).   <---> Output : variable 'Kminus_PT' (index=10).
+--- Deco                     : Input : variable 'pplus_P' (index=11).   <---> Output : variable 'pplus_P' (index=11).
+--- Deco                     : Input : variable 'pplus_PT' (index=12).   <---> Output : variable 'pplus_PT' (index=12).
+--- Deco                     : Input : variable 'piplus_P' (index=13).   <---> Output : variable 'piplus_P' (index=13).
+--- Deco                     : Input : variable 'piplus_PT' (index=14).   <---> Output : variable 'piplus_PT' (index=14).
+--- Deco                     : Input : variable 'Kminus_PIDK' (index=15).   <---> Output : variable 'Kminus_PIDK' (index=15).
+--- Deco                     : Input : variable 'piplus_PIDK' (index=16).   <---> Output : variable 'piplus_PIDK' (index=16).
+--- Deco                     : Input : variable 'pplus_PIDK' (index=17).   <---> Output : variable 'pplus_PIDK' (index=17).
+--- Deco                     : Input : variable 'pplus_PIDp' (index=18).   <---> Output : variable 'pplus_PIDp' (index=18).
+--- Deco                     : Input : variable 'pplus_PIDp-pplus_PIDK' (index=19).   <---> Output : variable 'pplus_PIDp-pplus_PIDK' (index=19).
+--- Factory                  : 
+--- Factory                  : current transformation string: 'P'
+--- Factory                  : Create Transformation "P" with events from all classes.
+--- PCA                      : Transformation, Variable selection : 
+--- PCA                      : Input : variable 'proton_LcRest_costheta' (index=0).   <---> Output : variable 'proton_LcRest_costheta' (index=0).
+--- PCA                      : Input : variable 'proton_LcRest_cosphi' (index=1).   <---> Output : variable 'proton_LcRest_cosphi' (index=1).
+--- PCA                      : Input : variable 'Lambdac_LcRest_thetah1h2' (index=2).   <---> Output : variable 'Lambdac_LcRest_thetah1h2' (index=2).
+--- PCA                      : Input : variable 'piplus_TRACK_GhostProb' (index=3).   <---> Output : variable 'piplus_TRACK_GhostProb' (index=3).
+--- PCA                      : Input : variable 'pplus_TRACK_GhostProb' (index=4).   <---> Output : variable 'pplus_TRACK_GhostProb' (index=4).
+--- PCA                      : Input : variable 'Kminus_TRACK_GhostProb' (index=5).   <---> Output : variable 'Kminus_TRACK_GhostProb' (index=5).
+--- PCA                      : Input : variable 'Lambda_cplus_ENDVERTEX_CHI2' (index=6).   <---> Output : variable 'Lambda_cplus_ENDVERTEX_CHI2' (index=6).
+--- PCA                      : Input : variable 'Lambda_cplus_P' (index=7).   <---> Output : variable 'Lambda_cplus_P' (index=7).
+--- PCA                      : Input : variable 'Lambda_cplus_PT' (index=8).   <---> Output : variable 'Lambda_cplus_PT' (index=8).
+--- PCA                      : Input : variable 'Kminus_P' (index=9).   <---> Output : variable 'Kminus_P' (index=9).
+--- PCA                      : Input : variable 'Kminus_PT' (index=10).   <---> Output : variable 'Kminus_PT' (index=10).
+--- PCA                      : Input : variable 'pplus_P' (index=11).   <---> Output : variable 'pplus_P' (index=11).
+--- PCA                      : Input : variable 'pplus_PT' (index=12).   <---> Output : variable 'pplus_PT' (index=12).
+--- PCA                      : Input : variable 'piplus_P' (index=13).   <---> Output : variable 'piplus_P' (index=13).
+--- PCA                      : Input : variable 'piplus_PT' (index=14).   <---> Output : variable 'piplus_PT' (index=14).
+--- PCA                      : Input : variable 'Kminus_PIDK' (index=15).   <---> Output : variable 'Kminus_PIDK' (index=15).
+--- PCA                      : Input : variable 'piplus_PIDK' (index=16).   <---> Output : variable 'piplus_PIDK' (index=16).
+--- PCA                      : Input : variable 'pplus_PIDK' (index=17).   <---> Output : variable 'pplus_PIDK' (index=17).
+--- PCA                      : Input : variable 'pplus_PIDp' (index=18).   <---> Output : variable 'pplus_PIDp' (index=18).
+--- PCA                      : Input : variable 'pplus_PIDp-pplus_PIDK' (index=19).   <---> Output : variable 'pplus_PIDp-pplus_PIDK' (index=19).
+--- Factory                  : 
+--- Factory                  : current transformation string: 'G,D'
+--- Factory                  : Create Transformation "G" with events from all classes.
+--- Gauss                    : Transformation, Variable selection : 
+--- Gauss                    : Input : variable 'proton_LcRest_costheta' (index=0).   <---> Output : variable 'proton_LcRest_costheta' (index=0).
+--- Gauss                    : Input : variable 'proton_LcRest_cosphi' (index=1).   <---> Output : variable 'proton_LcRest_cosphi' (index=1).
+--- Gauss                    : Input : variable 'Lambdac_LcRest_thetah1h2' (index=2).   <---> Output : variable 'Lambdac_LcRest_thetah1h2' (index=2).
+--- Gauss                    : Input : variable 'piplus_TRACK_GhostProb' (index=3).   <---> Output : variable 'piplus_TRACK_GhostProb' (index=3).
+--- Gauss                    : Input : variable 'pplus_TRACK_GhostProb' (index=4).   <---> Output : variable 'pplus_TRACK_GhostProb' (index=4).
+--- Gauss                    : Input : variable 'Kminus_TRACK_GhostProb' (index=5).   <---> Output : variable 'Kminus_TRACK_GhostProb' (index=5).
+--- Gauss                    : Input : variable 'Lambda_cplus_ENDVERTEX_CHI2' (index=6).   <---> Output : variable 'Lambda_cplus_ENDVERTEX_CHI2' (index=6).
+--- Gauss                    : Input : variable 'Lambda_cplus_P' (index=7).   <---> Output : variable 'Lambda_cplus_P' (index=7).
+--- Gauss                    : Input : variable 'Lambda_cplus_PT' (index=8).   <---> Output : variable 'Lambda_cplus_PT' (index=8).
+--- Gauss                    : Input : variable 'Kminus_P' (index=9).   <---> Output : variable 'Kminus_P' (index=9).
+--- Gauss                    : Input : variable 'Kminus_PT' (index=10).   <---> Output : variable 'Kminus_PT' (index=10).
+--- Gauss                    : Input : variable 'pplus_P' (index=11).   <---> Output : variable 'pplus_P' (index=11).
+--- Gauss                    : Input : variable 'pplus_PT' (index=12).   <---> Output : variable 'pplus_PT' (index=12).
+--- Gauss                    : Input : variable 'piplus_P' (index=13).   <---> Output : variable 'piplus_P' (index=13).
+--- Gauss                    : Input : variable 'piplus_PT' (index=14).   <---> Output : variable 'piplus_PT' (index=14).
+--- Gauss                    : Input : variable 'Kminus_PIDK' (index=15).   <---> Output : variable 'Kminus_PIDK' (index=15).
+--- Gauss                    : Input : variable 'piplus_PIDK' (index=16).   <---> Output : variable 'piplus_PIDK' (index=16).
+--- Gauss                    : Input : variable 'pplus_PIDK' (index=17).   <---> Output : variable 'pplus_PIDK' (index=17).
+--- Gauss                    : Input : variable 'pplus_PIDp' (index=18).   <---> Output : variable 'pplus_PIDp' (index=18).
+--- Gauss                    : Input : variable 'pplus_PIDp-pplus_PIDK' (index=19).   <---> Output : variable 'pplus_PIDp-pplus_PIDK' (index=19).
+--- Factory                  : Create Transformation "D" with events from all classes.
+--- Deco                     : Transformation, Variable selection : 
+--- Deco                     : Input : variable 'proton_LcRest_costheta' (index=0).   <---> Output : variable 'proton_LcRest_costheta' (index=0).
+--- Deco                     : Input : variable 'proton_LcRest_cosphi' (index=1).   <---> Output : variable 'proton_LcRest_cosphi' (index=1).
+--- Deco                     : Input : variable 'Lambdac_LcRest_thetah1h2' (index=2).   <---> Output : variable 'Lambdac_LcRest_thetah1h2' (index=2).
+--- Deco                     : Input : variable 'piplus_TRACK_GhostProb' (index=3).   <---> Output : variable 'piplus_TRACK_GhostProb' (index=3).
+--- Deco                     : Input : variable 'pplus_TRACK_GhostProb' (index=4).   <---> Output : variable 'pplus_TRACK_GhostProb' (index=4).
+--- Deco                     : Input : variable 'Kminus_TRACK_GhostProb' (index=5).   <---> Output : variable 'Kminus_TRACK_GhostProb' (index=5).
+--- Deco                     : Input : variable 'Lambda_cplus_ENDVERTEX_CHI2' (index=6).   <---> Output : variable 'Lambda_cplus_ENDVERTEX_CHI2' (index=6).
+--- Deco                     : Input : variable 'Lambda_cplus_P' (index=7).   <---> Output : variable 'Lambda_cplus_P' (index=7).
+--- Deco                     : Input : variable 'Lambda_cplus_PT' (index=8).   <---> Output : variable 'Lambda_cplus_PT' (index=8).
+--- Deco                     : Input : variable 'Kminus_P' (index=9).   <---> Output : variable 'Kminus_P' (index=9).
+--- Deco                     : Input : variable 'Kminus_PT' (index=10).   <---> Output : variable 'Kminus_PT' (index=10).
+--- Deco                     : Input : variable 'pplus_P' (index=11).   <---> Output : variable 'pplus_P' (index=11).
+--- Deco                     : Input : variable 'pplus_PT' (index=12).   <---> Output : variable 'pplus_PT' (index=12).
+--- Deco                     : Input : variable 'piplus_P' (index=13).   <---> Output : variable 'piplus_P' (index=13).
+--- Deco                     : Input : variable 'piplus_PT' (index=14).   <---> Output : variable 'piplus_PT' (index=14).
+--- Deco                     : Input : variable 'Kminus_PIDK' (index=15).   <---> Output : variable 'Kminus_PIDK' (index=15).
+--- Deco                     : Input : variable 'piplus_PIDK' (index=16).   <---> Output : variable 'piplus_PIDK' (index=16).
+--- Deco                     : Input : variable 'pplus_PIDK' (index=17).   <---> Output : variable 'pplus_PIDK' (index=17).
+--- Deco                     : Input : variable 'pplus_PIDp' (index=18).   <---> Output : variable 'pplus_PIDp' (index=18).
+--- Deco                     : Input : variable 'pplus_PIDp-pplus_PIDK' (index=19).   <---> Output : variable 'pplus_PIDp-pplus_PIDK' (index=19).
+--- Id                       : Preparing the Identity transformation...
+--- TFHandler_Factory        : ----------------------------------------------------------------------------------------------------------------------------------------------------------
+--- TFHandler_Factory        :                    Variable                           Mean                           RMS                   [        Min                           Max ]
+--- TFHandler_Factory        : ----------------------------------------------------------------------------------------------------------------------------------------------------------
+--- TFHandler_Factory        :      proton_LcRest_costheta:                   0.00084100                      0.57042   [                      -1.0000                       1.0000 ]
+--- TFHandler_Factory        :        proton_LcRest_cosphi:                     -0.11008                      0.70060   [                      -1.0000                       1.0000 ]
+--- TFHandler_Factory        :    Lambdac_LcRest_thetah1h2:                    0.0011744                       1.8213   [                      -3.1414                       3.1411 ]
+--- TFHandler_Factory        :      piplus_TRACK_GhostProb:                     0.037871                     0.067615   [                    0.0014727                      0.40000 ]
+--- TFHandler_Factory        :       pplus_TRACK_GhostProb:                     0.050298                     0.084750   [                    0.0015225                      0.40000 ]
+--- TFHandler_Factory        :      Kminus_TRACK_GhostProb:                     0.040960                     0.073344   [                    0.0014872                      0.40000 ]
+--- TFHandler_Factory        : Lambda_cplus_ENDVERTEX_CHI2:                       7.9032                       7.6555   [                   0.00012315                       30.000 ]
+--- TFHandler_Factory        :              Lambda_cplus_P:                       80220.                       40708.   [                       18321.                   4.3907e+05 ]
+--- TFHandler_Factory        :             Lambda_cplus_PT:                       6880.3                       2240.6   [                       4705.4                       35676. ]
+--- TFHandler_Factory        :                    Kminus_P:                       23189.                       15012.   [                       2969.7                   1.2278e+05 ]
+--- TFHandler_Factory        :                   Kminus_PT:                       2064.9                       1219.5   [                       500.02                       14863. ]
+--- TFHandler_Factory        :                     pplus_P:                       35978.                       22612.   [                       10010.                   2.0794e+05 ]
+--- TFHandler_Factory        :                    pplus_PT:                       3130.8                       1507.0   [                       727.49                       18248. ]
+--- TFHandler_Factory        :                    piplus_P:                       21068.                       18044.   [                       2564.9                   2.4131e+05 ]
+--- TFHandler_Factory        :                   piplus_PT:                       1761.2                       1122.9   [                       500.00                       17937. ]
+--- TFHandler_Factory        :                 Kminus_PIDK:                       27.602                       14.897   [                       10.000                       133.92 ]
+--- TFHandler_Factory        :                 piplus_PIDK:                      -26.313                       19.306   [                      -177.34                  -4.7684e-07 ]
+--- TFHandler_Factory        :                  pplus_PIDK:                       7.5913                       8.3514   [                      -29.589                       53.077 ]
+--- TFHandler_Factory        :                  pplus_PIDp:                       30.063                       14.636   [                       10.000                       147.09 ]
+--- TFHandler_Factory        :       pplus_PIDp-pplus_PIDK:                       22.471                       13.863   [                       5.0001                       128.47 ]
+--- TFHandler_Factory        : ----------------------------------------------------------------------------------------------------------------------------------------------------------
+--- TFHandler_Factory        : Plot event variables for Id
+--- TFHandler_Factory        : Create scatter and profile plots in target-file directory: 
+--- TFHandler_Factory        : TMVA.root:/InputVariables_Id/CorrelationPlots
+--- Deco                     : Preparing the Decorrelation transformation...
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+[1;31m--- <WARNING> Tools                    : <GetSQRootMatrix> error in matrix diagonalization; printed S and B[0m
+--- TFHandler_Factory        : ----------------------------------------------------------------------------------------------------------------------------------------------------------
+--- TFHandler_Factory        :                    Variable                           Mean                           RMS                   [        Min                           Max ]
+--- TFHandler_Factory        : ----------------------------------------------------------------------------------------------------------------------------------------------------------
+--- TFHandler_Factory        :      proton_LcRest_costheta:                    0.0071596                       1.0000   [                      -1.7743                       1.7996 ]
+--- TFHandler_Factory        :        proton_LcRest_cosphi:                     -0.52236                       1.0000   [                      -6.5414                       4.8737 ]
+--- TFHandler_Factory        :    Lambdac_LcRest_thetah1h2:                     0.052364                       1.0000   [                      -1.7387                       1.8529 ]
+--- TFHandler_Factory        :      piplus_TRACK_GhostProb:                      0.96967                       1.0000   [                     -0.28964                       6.7652 ]
+--- TFHandler_Factory        :       pplus_TRACK_GhostProb:                       1.1104                       1.0000   [                     -0.39695                       5.9803 ]
+--- TFHandler_Factory        :      Kminus_TRACK_GhostProb:                       1.1137                       1.0000   [                     -0.54339                       6.6125 ]
+--- TFHandler_Factory        : Lambda_cplus_ENDVERTEX_CHI2:                       1.6185                       1.0000   [                      0.23664                       5.3358 ]
+--- TFHandler_Factory        :              Lambda_cplus_P:                       1.3347                       1.0000   [                      -35.935                       51.209 ]
+--- TFHandler_Factory        :             Lambda_cplus_PT:                       1.1981                       1.0000   [                      -1.6119                       11.793 ]
+--- TFHandler_Factory        :                    Kminus_P:                       1.1399                       1.0000   [                      -47.415                       39.921 ]
+--- TFHandler_Factory        :                   Kminus_PT:                       1.7413                       1.0000   [                      -3.3502                       13.375 ]
+--- TFHandler_Factory        :                     pplus_P:                       1.0241                       1.0000   [                      -44.434                       40.954 ]
+--- TFHandler_Factory        :                    pplus_PT:                       2.2755                       1.0000   [                      -3.8466                       10.890 ]
+--- TFHandler_Factory        :                    piplus_P:                      0.62396                       1.0000   [                      -45.417                       45.842 ]
+--- TFHandler_Factory        :                   piplus_PT:                       1.9567                       1.0000   [                      -5.4158                       15.390 ]
+--- TFHandler_Factory        :                 Kminus_PIDK:                       1.4959                       1.0000   [                      -3.1721                       8.7718 ]
+--- TFHandler_Factory        :                 piplus_PIDK:                      -1.2215                       1.0000   [                      -9.1747                       3.0878 ]
+--- TFHandler_Factory        :                  pplus_PIDK:                      0.94609                      0.81266   [                      -2.6961                       5.1849 ]
+--- TFHandler_Factory        :                  pplus_PIDp:                       1.4628                      0.81843   [                      -1.5059                       7.9271 ]
+--- TFHandler_Factory        :       pplus_PIDp-pplus_PIDK:                      0.50590                      0.81863   [                      -3.0762                       6.6211 ]
+--- TFHandler_Factory        : ----------------------------------------------------------------------------------------------------------------------------------------------------------
+--- TFHandler_Factory        : Plot event variables for Deco
+--- TFHandler_Factory        : Create scatter and profile plots in target-file directory: 
+--- TFHandler_Factory        : TMVA.root:/InputVariables_Deco/CorrelationPlots
+--- PCA                      : Preparing the Principle Component (PCA) transformation...
+--- TFHandler_Factory        : ----------------------------------------------------------------------------------------------------------------------------------------------------------
+--- TFHandler_Factory        :                    Variable                           Mean                           RMS                   [        Min                           Max ]
+--- TFHandler_Factory        : ----------------------------------------------------------------------------------------------------------------------------------------------------------
+--- TFHandler_Factory        :      proton_LcRest_costheta:                       944.41                       47484.   [                  -4.1624e+05                       72293. ]
+--- TFHandler_Factory        :        proton_LcRest_cosphi:                       770.80                       16242.   [                  -1.1194e+05                   1.0863e+05 ]
+--- TFHandler_Factory        :    Lambdac_LcRest_thetah1h2:                       222.62                       14263.   [                      -84653.                       90478. ]
+--- TFHandler_Factory        :      piplus_TRACK_GhostProb:                      -386.08                       2558.6   [                      -33500.                       4164.6 ]
+--- TFHandler_Factory        :       pplus_TRACK_GhostProb:                       3.2002                       702.97   [                      -6617.2                       6376.3 ]
+--- TFHandler_Factory        :      Kminus_TRACK_GhostProb:                      -10.686                       645.41   [                      -7626.4                       6411.5 ]
+--- TFHandler_Factory        : Lambda_cplus_ENDVERTEX_CHI2:                       2.7614                       27.144   [                      -256.99                       256.93 ]
+--- TFHandler_Factory        :              Lambda_cplus_P:                      -3.7597                       20.777   [                      -168.90                       102.60 ]
+--- TFHandler_Factory        :             Lambda_cplus_PT:                      0.19678                       16.237   [                      -1504.5                       1276.5 ]
+--- TFHandler_Factory        :                    Kminus_P:                      0.29985                       15.931   [                      -95.240                       122.34 ]
+--- TFHandler_Factory        :                   Kminus_PT:                       1.0437                       13.246   [                      -66.037                       94.722 ]
+--- TFHandler_Factory        :                     pplus_P:                      0.10790                       9.8298   [                      -51.075                       45.488 ]
+--- TFHandler_Factory        :                    pplus_PT:                       1.5753                       7.5176   [                      -28.163                       13.384 ]
+--- TFHandler_Factory        :                    piplus_P:                  -0.00022293                       1.8211   [                      -3.2311                       3.1921 ]
+--- TFHandler_Factory        :                   piplus_PT:                    0.0010025                      0.57043   [                      -1.0178                       1.0194 ]
+--- TFHandler_Factory        :                 Kminus_PIDK:                   -0.0042118                      0.37176   [                      -1.8995                       2.2767 ]
+--- TFHandler_Factory        :                 piplus_PIDK:                   -0.0088372                     0.083660   [                     -0.14302                      0.42732 ]
+--- TFHandler_Factory        :                  pplus_PIDK:                    0.0027950                     0.071186   [                     -0.40807                      0.15431 ]
+--- TFHandler_Factory        :                  pplus_PIDp:                    0.0018329                     0.065515   [                     -0.37216                      0.16594 ]
+--- TFHandler_Factory        :       pplus_PIDp-pplus_PIDK:                  -1.5934e-10                   3.8041e-08   [                  -1.0919e-06                   1.1421e-06 ]
+--- TFHandler_Factory        : ----------------------------------------------------------------------------------------------------------------------------------------------------------
+--- TFHandler_Factory        : Plot event variables for PCA
+--- TFHandler_Factory        : Create scatter and profile plots in target-file directory: 
+--- TFHandler_Factory        : TMVA.root:/InputVariables_PCA/CorrelationPlots
+--- Gauss                    : Preparing the Gaussian transformation...
+--- Deco                     : Preparing the Decorrelation transformation...
+--- TFHandler_Factory        : ----------------------------------------------------------------------------------------------------------------------------------------------------------
+--- TFHandler_Factory        :                    Variable                           Mean                           RMS                   [        Min                           Max ]
+--- TFHandler_Factory        : ----------------------------------------------------------------------------------------------------------------------------------------------------------
+--- TFHandler_Factory        :      proton_LcRest_costheta:                    0.0034526                       1.0000   [                      -3.3066                       5.7528 ]
+--- TFHandler_Factory        :        proton_LcRest_cosphi:                    0.0033793                       1.0000   [                      -5.4592                       4.9397 ]
+--- TFHandler_Factory        :    Lambdac_LcRest_thetah1h2:                    0.0025139                       1.0000   [                      -3.2909                       5.7709 ]
+--- TFHandler_Factory        :      piplus_TRACK_GhostProb:                    0.0038344                       1.0000   [                      -3.4002                       6.1343 ]
+--- TFHandler_Factory        :       pplus_TRACK_GhostProb:                    0.0042104                       1.0000   [                      -3.5094                       6.2930 ]
+--- TFHandler_Factory        :      Kminus_TRACK_GhostProb:                    0.0028269                       1.0000   [                      -3.4870                       6.2337 ]
+--- TFHandler_Factory        : Lambda_cplus_ENDVERTEX_CHI2:                    0.0036313                       1.0000   [                      -3.6283                       6.3090 ]
+--- TFHandler_Factory        :              Lambda_cplus_P:                   -0.0011199                       1.0000   [                      -4.9808                       10.748 ]
+--- TFHandler_Factory        :             Lambda_cplus_PT:                    0.0024494                       1.0000   [                      -5.2734                       4.2984 ]
+--- TFHandler_Factory        :                    Kminus_P:                    0.0021114                       1.0000   [                      -5.2478                       10.469 ]
+--- TFHandler_Factory        :                   Kminus_PT:                    0.0032919                       1.0000   [                      -5.5622                       8.0674 ]
+--- TFHandler_Factory        :                     pplus_P:                    0.0019067                       1.0000   [                      -7.3774                       11.842 ]
+--- TFHandler_Factory        :                    pplus_PT:                  -4.4808e-05                       1.0000   [                      -4.5388                       8.3756 ]
+--- TFHandler_Factory        :                    piplus_P:                    0.0049908                       1.0000   [                      -6.3796                       7.8640 ]
+--- TFHandler_Factory        :                   piplus_PT:                   0.00061436                       1.0000   [                      -5.6505                       6.3447 ]
+--- TFHandler_Factory        :                 Kminus_PIDK:                    0.0022150                       1.0000   [                      -3.7481                       5.8224 ]
+--- TFHandler_Factory        :                 piplus_PIDK:                    0.0027041                       1.0000   [                      -3.6018                       4.4489 ]
+--- TFHandler_Factory        :                  pplus_PIDK:                    0.0055844                       1.0000   [                      -4.5186                       7.7323 ]
+--- TFHandler_Factory        :                  pplus_PIDp:                  -0.00013850                       1.0000   [                      -6.1421                       7.5270 ]
+--- TFHandler_Factory        :       pplus_PIDp-pplus_PIDK:                    0.0047590                       1.0000   [                      -6.3910                       6.2945 ]
+--- TFHandler_Factory        : ----------------------------------------------------------------------------------------------------------------------------------------------------------
+--- TFHandler_Factory        : Plot event variables for Gauss_Deco
+--- TFHandler_Factory        : Create scatter and profile plots in target-file directory: 
+--- TFHandler_Factory        : TMVA.root:/InputVariables_Gauss_Deco/CorrelationPlots
+--- TFHandler_Factory        :  
+--- TFHandler_Factory        : Ranking input variables (method unspecific)...
+--- IdTransformation         : Ranking result (top variable is best ranked)
+--- IdTransformation         : ----------------------------------------------------
+--- IdTransformation         : Rank : Variable                    : Separation
+--- IdTransformation         : ----------------------------------------------------
+--- IdTransformation         :    1 : Lambda_cplus_ENDVERTEX_CHI2 : 1.946e-01
+--- IdTransformation         :    2 : pplus_PIDp                  : 1.048e-01
+--- IdTransformation         :    3 : Kminus_PIDK                 : 9.426e-02
+--- IdTransformation         :    4 : pplus_PIDp-pplus_PIDK       : 8.534e-02
+--- IdTransformation         :    5 : Lambda_cplus_PT             : 8.320e-02
+--- IdTransformation         :    6 : pplus_TRACK_GhostProb       : 7.999e-02
+--- IdTransformation         :    7 : pplus_PT                    : 7.913e-02
+--- IdTransformation         :    8 : piplus_PIDK                 : 7.299e-02
+--- IdTransformation         :    9 : Kminus_PT                   : 4.351e-02
+--- IdTransformation         :   10 : Kminus_TRACK_GhostProb      : 4.211e-02
+--- IdTransformation         :   11 : piplus_TRACK_GhostProb      : 3.888e-02
+--- IdTransformation         :   12 : proton_LcRest_cosphi        : 2.871e-02
+--- IdTransformation         :   13 : proton_LcRest_costheta      : 2.793e-02
+--- IdTransformation         :   14 : piplus_PT                   : 2.476e-02
+--- IdTransformation         :   15 : pplus_P                     : 1.276e-02
+--- IdTransformation         :   16 : piplus_P                    : 1.066e-02
+--- IdTransformation         :   17 : Kminus_P                    : 9.963e-03
+--- IdTransformation         :   18 : pplus_PIDK                  : 7.633e-03
+--- IdTransformation         :   19 : Lambdac_LcRest_thetah1h2    : 4.753e-03
+--- IdTransformation         :   20 : Lambda_cplus_P              : 2.512e-03
+--- IdTransformation         : ----------------------------------------------------
+--- Factory                  :  
+--- Factory                  : Train all methods for Classification ...
+--- Factory                  : Train method: BDTG for Classification
+--- BDTG                     : Begin training
+--- BDTG                     :  found and suggest the following possible pre-selection cuts 
+--- BDTG                     : as option DoPreselection was not used, these cuts however will not be performed, but the training will see the full sample
+[1;31m--- <WARNING> BDTG                     :  Note, you have events with negative event weight in the sample, but you've chosen to ignore them[0m
+--- BDTG                     : <InitEventSample> For classification trees, 
+--- BDTG                     :  the effective number of backgrounds is scaled to match 
+--- BDTG                     :  the signal. Othersise the first boosting step would do 'just that'!
+--- BDTG                     : re-normlise events such that Sig and Bkg have respective sum of weights = 1
+--- BDTG                     :   sig->sig*0.3652ev. bkg->bkg*0.562294ev.
+--- BDTG                     : #events: (reweighted) sig: 84934 bkg: 84934
+--- BDTG                     : #events: (unweighted) sig: 56387 bkg: 113481
+--- BDTG                     : Training 1000 Decision Trees ... patience please
+--- BinaryTree               : The minimal node size MinNodeSize=2.5 fMinNodeSize=2.5% is translated to an actual number of events = 2115.8 for the training sample size of 84632
+--- BinaryTree               : Note: This number will be taken as absolute minimum in the node, 
+--- BinaryTree               :       in terms of 'weighted events' and unweighted ones !! 
+--- BDTG                     : <Train> elapsed time: [1;31m205 sec[0m                              
+--- BDTG                     : <Train> average number of nodes (w/o pruning) : 6
+--- BDTG                     : End of training                                              
+--- BDTG                     : Elapsed time for training with 287142 events: [1;31m210 sec[0m         
+--- BDTG                     : Create MVA output for classification on training sample
+--- BDTG                     : Evaluation of BDTG on training sample (287142 events)
+--- BDTG                     : Elapsed time for evaluation of 287142 events: [1;31m24.6 sec[0m       
+--- BDTG                     : Creating weight file in xml format: [0;36mweights/TMVAClassification_BDTG.weights.xml[0m
+--- BDTG                     : Creating standalone response class: [0;36mweights/TMVAClassification_BDTG.class.C[0m
+--- BDTG                     : Write monitoring histograms to file: TMVA.root:/Method_BDT/BDTG
+--- Factory                  : Training finished
+--- Factory                  : 
+--- Factory                  : Ranking input variables (method specific)...
+--- BDTG                     : Ranking result (top variable is best ranked)
+--- BDTG                     : -------------------------------------------------------------
+--- BDTG                     : Rank : Variable                    : Variable Importance
+--- BDTG                     : -------------------------------------------------------------
+--- BDTG                     :    1 : Lambda_cplus_ENDVERTEX_CHI2 : 7.936e-02
+--- BDTG                     :    2 : pplus_TRACK_GhostProb       : 5.900e-02
+--- BDTG                     :    3 : Lambdac_LcRest_thetah1h2    : 5.505e-02
+--- BDTG                     :    4 : Kminus_TRACK_GhostProb      : 5.419e-02
+--- BDTG                     :    5 : proton_LcRest_costheta      : 5.273e-02
+--- BDTG                     :    6 : Kminus_PIDK                 : 5.221e-02
+--- BDTG                     :    7 : piplus_PT                   : 5.193e-02
+--- BDTG                     :    8 : proton_LcRest_cosphi        : 5.152e-02
+--- BDTG                     :    9 : piplus_PIDK                 : 5.141e-02
+--- BDTG                     :   10 : piplus_TRACK_GhostProb      : 5.099e-02
+--- BDTG                     :   11 : pplus_PIDp                  : 4.910e-02
+--- BDTG                     :   12 : pplus_PT                    : 4.900e-02
+--- BDTG                     :   13 : Kminus_PT                   : 4.800e-02
+--- BDTG                     :   14 : Lambda_cplus_PT             : 4.562e-02
+--- BDTG                     :   15 : Kminus_P                    : 4.552e-02
+--- BDTG                     :   16 : Lambda_cplus_P              : 4.274e-02
+--- BDTG                     :   17 : pplus_P                     : 4.164e-02
+--- BDTG                     :   18 : pplus_PIDK                  : 4.053e-02
+--- BDTG                     :   19 : piplus_P                    : 4.014e-02
+--- BDTG                     :   20 : pplus_PIDp-pplus_PIDK       : 3.933e-02
+--- BDTG                     : -------------------------------------------------------------
+--- Factory                  : 
+--- Factory                  : === Destroy and recreate all methods via weight files for testing ===
+--- Factory                  : 
+--- MethodBase               : Reading weight file: [0;36mweights/TMVAClassification_BDTG.weights.xml[0m
+--- BDTG                     : Read method "BDTG" of type "BDT"
+--- BDTG                     : MVA method was trained with TMVA Version: 4.2.0
+--- BDTG                     : MVA method was trained with ROOT Version: 5.34/26
+--- Factory                  : Test all methods...
+--- Factory                  : Test method: BDTG for Classification performance
+--- BDTG                     : Evaluation of BDTG on testing sample (287142 events)
+--- BDTG                     : Elapsed time for evaluation of 287142 events: [1;31m22.9 sec[0m       
+--- Factory                  : Evaluate all methods...
+--- Factory                  : Evaluate classifier: BDTG
+--- BDTG                     : Loop over test events and fill histograms with classifier response...
+--- Factory                  : Write evaluation histograms to file
+--- TFHandler_BDTG           : Plot event variables for BDTG
+--- TFHandler_BDTG           : ----------------------------------------------------------------------------------------------------------------------------------------------------------
+--- TFHandler_BDTG           :                    Variable                           Mean                           RMS                   [        Min                           Max ]
+--- TFHandler_BDTG           : ----------------------------------------------------------------------------------------------------------------------------------------------------------
+--- TFHandler_BDTG           :      proton_LcRest_costheta:                   0.00012642                      0.54555   [                      -1.0000                       1.0000 ]
+--- TFHandler_BDTG           :        proton_LcRest_cosphi:                     -0.14121                      0.71424   [                      -1.0000                       1.0000 ]
+--- TFHandler_BDTG           :    Lambdac_LcRest_thetah1h2:                    0.0071389                       1.8127   [                      -3.1414                       3.1411 ]
+--- TFHandler_BDTG           :      piplus_TRACK_GhostProb:                     0.044840                     0.075550   [                    0.0014727                      0.40000 ]
+--- TFHandler_BDTG           :       pplus_TRACK_GhostProb:                     0.063289                     0.096222   [                    0.0015526                      0.40000 ]
+--- TFHandler_BDTG           :      Kminus_TRACK_GhostProb:                     0.049129                     0.082180   [                    0.0016110                      0.40000 ]
+--- TFHandler_BDTG           : Lambda_cplus_ENDVERTEX_CHI2:                       9.7469                       8.2710   [                   6.0778e-05                       30.000 ]
+--- TFHandler_BDTG           :              Lambda_cplus_P:                       81192.                       41694.   [                       18321.                   4.3907e+05 ]
+--- TFHandler_BDTG           :             Lambda_cplus_PT:                       6552.5                       1976.2   [                       4696.6                       41878. ]
+--- TFHandler_BDTG           :                    Kminus_P:                       23321.                       15519.   [                       2969.7                   1.2278e+05 ]
+--- TFHandler_BDTG           :                   Kminus_PT:                       1964.5                       1197.3   [                       500.02                       13254. ]
+--- TFHandler_BDTG           :                     pplus_P:                       35893.                       23166.   [                       10002.                   2.0794e+05 ]
+--- TFHandler_BDTG           :                    pplus_PT:                       2945.8                       1419.7   [                       723.91                       19612. ]
+--- TFHandler_BDTG           :                    piplus_P:                       21993.                       19407.   [                       2564.0                   2.4131e+05 ]
+--- TFHandler_BDTG           :                   piplus_PT:                       1715.8                       1108.4   [                       500.00                       21300. ]
+--- TFHandler_BDTG           :                 Kminus_PIDK:                       25.098                       13.596   [                       10.000                       132.17 ]
+--- TFHandler_BDTG           :                 piplus_PIDK:                      -23.463                       18.010   [                      -177.34                  -3.5763e-07 ]
+--- TFHandler_BDTG           :                  pplus_PIDK:                       7.3029                       8.2758   [                      -28.107                       59.230 ]
+--- TFHandler_BDTG           :                  pplus_PIDp:                       27.640                       13.719   [                       10.000                       147.09 ]
+--- TFHandler_BDTG           :       pplus_PIDp-pplus_PIDK:                       20.337                       12.832   [                       5.0003                       128.47 ]
+--- TFHandler_BDTG           : ----------------------------------------------------------------------------------------------------------------------------------------------------------
+--- TFHandler_BDTG           : Create scatter and profile plots in target-file directory: 
+--- TFHandler_BDTG           : TMVA.root:/Method_BDT/BDTG/CorrelationPlots
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (0, 1)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (0, 2)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (0, 4)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (0, 5)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (0, 6)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (1, 0)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (1, 4)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (1, 5)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (1, 6)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (2, 0)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (2, 4)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (2, 5)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (2, 6)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (3, 4)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (3, 5)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (3, 6)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (4, 0)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (4, 1)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (4, 2)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (4, 3)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (4, 5)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (4, 6)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (5, 0)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (5, 1)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (5, 2)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (5, 3)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (5, 4)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (5, 6)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (6, 0)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (6, 1)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (6, 2)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (6, 3)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (6, 4)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (6, 5)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (0, 1)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (0, 2)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (0, 4)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (0, 5)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (0, 6)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (1, 0)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (1, 4)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (1, 5)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (1, 6)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (2, 0)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (2, 4)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (2, 5)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (2, 6)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (3, 4)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (3, 5)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (3, 6)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (4, 0)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (4, 1)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (4, 2)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (4, 3)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (4, 5)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (4, 6)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (5, 0)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (5, 1)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (5, 2)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (5, 3)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (5, 4)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (5, 6)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (6, 0)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (6, 1)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (6, 2)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (6, 3)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (6, 4)[0m
+[1;31m--- <WARNING> Tools                    : <GetCorrelationMatrix> zero variances for variables (6, 5)[0m
+--- Factory                  : Correlations between input variables and MVA response (signal):
+--- Factory                  : ----------------
+--- Factory                  :                                 BDTG
+--- Factory                  :      proton_LcRest_costheta:  +0.000
+--- Factory                  :        proton_LcRest_cosphi:  +0.000
+--- Factory                  :    Lambdac_LcRest_thetah1h2:  +0.002
+--- Factory                  :      piplus_TRACK_GhostProb:  +0.000
+--- Factory                  :       pplus_TRACK_GhostProb:  +0.000
+--- Factory                  :      Kminus_TRACK_GhostProb:  +0.000
+--- Factory                  : Lambda_cplus_ENDVERTEX_CHI2:  -0.542
+--- Factory                  :              Lambda_cplus_P:  -0.050
+--- Factory                  :             Lambda_cplus_PT:  +0.375
+--- Factory                  :                    Kminus_P:  -0.039
+--- Factory                  :                   Kminus_PT:  +0.161
+--- Factory                  :                     pplus_P:  +0.021
+--- Factory                  :                    pplus_PT:  +0.311
+--- Factory                  :                    piplus_P:  -0.101
+--- Factory                  :                   piplus_PT:  +0.105
+--- Factory                  :                 Kminus_PIDK:  +0.407
+--- Factory                  :                 piplus_PIDK:  -0.376
+--- Factory                  :                  pplus_PIDK:  +0.097
+--- Factory                  :                  pplus_PIDp:  +0.424
+--- Factory                  :       pplus_PIDp-pplus_PIDK:  +0.391
+--- Factory                  : ----------------
+--- Factory                  : 
+--- Factory                  : Correlations between input variables and MVA response (background):
+--- Factory                  : ----------------
+--- Factory                  :                                 BDTG
+--- Factory                  :      proton_LcRest_costheta:  +0.000
+--- Factory                  :        proton_LcRest_cosphi:  +0.000
+--- Factory                  :    Lambdac_LcRest_thetah1h2:  +0.000
+--- Factory                  :      piplus_TRACK_GhostProb:  +0.000
+--- Factory                  :       pplus_TRACK_GhostProb:  +0.000
+--- Factory                  :      Kminus_TRACK_GhostProb:  +0.000
+--- Factory                  : Lambda_cplus_ENDVERTEX_CHI2:  -0.539
+--- Factory                  :              Lambda_cplus_P:  -0.052
+--- Factory                  :             Lambda_cplus_PT:  +0.377
+--- Factory                  :                    Kminus_P:  -0.037
+--- Factory                  :                   Kminus_PT:  +0.164
+--- Factory                  :                     pplus_P:  +0.018
+--- Factory                  :                    pplus_PT:  +0.311
+--- Factory                  :                    piplus_P:  -0.104
+--- Factory                  :                   piplus_PT:  +0.102
+--- Factory                  :                 Kminus_PIDK:  +0.407
+--- Factory                  :                 piplus_PIDK:  -0.373
+--- Factory                  :                  pplus_PIDK:  +0.095
+--- Factory                  :                  pplus_PIDp:  +0.421
+--- Factory                  :       pplus_PIDp-pplus_PIDK:  +0.389
+--- Factory                  : ----------------
+--- Factory                  : 
+--- Factory                  : The following "overlap" matrices contain the fraction of events for which 
+--- Factory                  : the MVAs 'i' and 'j' have returned conform answers about "signal-likeness"
+--- Factory                  : An event is signal-like, if its MVA output exceeds the following value:
+--- Factory                  : --------------------
+--- Factory                  :  Method:  Cut value:
+--- Factory                  : --------------------
+--- Factory                  :    BDTG:     +0.077
+--- Factory                  : --------------------
+--- Factory                  : which correspond to the working point: eff(signal) = 1 - eff(background)
+--- Factory                  : 
+--- Factory                  : Evaluation results ranked by best signal efficiency and purity (area)
+--- Factory                  : --------------------------------------------------------------------------------
+--- Factory                  : MVA              Signal efficiency at bkg eff.(error):       | Sepa-    Signifi- 
+--- Factory                  : Method:          @B=0.01    @B=0.10    @B=0.30    ROC-integ. | ration:  cance:   
+--- Factory                  : --------------------------------------------------------------------------------
+--- Factory                  : BDTG           : 0.219(02)  0.666(02)  0.893(01)    0.888    | 0.463    1.294
+--- Factory                  : --------------------------------------------------------------------------------
+--- Factory                  : 
+--- Factory                  : Testing efficiency compared to training efficiency (overtraining check)
+--- Factory                  : --------------------------------------------------------------------------------
+--- Factory                  : MVA              Signal efficiency: from test sample (from training sample) 
+--- Factory                  : Method:          @B=0.01             @B=0.10            @B=0.30   
+--- Factory                  : --------------------------------------------------------------------------------
+--- Factory                  : BDTG           : 0.219 (0.232)       0.666 (0.671)      0.893 (0.896)
+--- Factory                  : --------------------------------------------------------------------------------
+--- Factory                  : 
+--- Dataset:Default          : Created tree 'TestTree' with 287142 events
+--- Dataset:Default          : Created tree 'TrainTree' with 287142 events
+--- Factory                  :   
+--- Factory                  : [1mThank you for using TMVA![0m
+--- Factory                  : [1mFor citation information, please visit: http://tmva.sf.net/citeTMVA.html[0m
+==> Wrote root file: TMVA.root
+==> TMVAClassification is done!
+==> LAUNCH GUI WITH:  root -l $ROOTSYS/tmva/test/TMVAGui.C

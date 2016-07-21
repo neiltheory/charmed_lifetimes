@@ -58,7 +58,7 @@ void binFit() {
 
   // Define dataset and make cuts.
   //RooDataSet* ds = (RooDataSet*)datafile->Get("ds") ;
-  RooDataSet ds("ds","ds",RooArgSet(Lambda_cplus_TAU, Lambda_cplus_M, Lambda_cplus_IPCHI2_OWNPV, BDTG),Import(*mytree),Cut("(0.00025<Lambda_cplus_TAU)&&(Lambda_cplus_TAU<0.002)&&(Lambda_cplus_M<2356)&&(2216<Lambda_cplus_M)&&(0.1506<BDTG)&&(Lambda_cplus_IPCHI2_OWNPV<3)")) ;
+  RooDataSet ds("ds","ds",RooArgSet(Lambda_cplus_TAU, Lambda_cplus_M, Lambda_cplus_IPCHI2_OWNPV, BDTG),Import(*mytree),Cut("(0.00025<Lambda_cplus_TAU)&&(Lambda_cplus_TAU<0.002)&&(Lambda_cplus_M<2356)&&(2216<Lambda_cplus_M)&&(0.0107<BDTG)&&(Lambda_cplus_IPCHI2_OWNPV<3)")) ;
 
 
   // Build probability density functions (PDFs).
@@ -111,10 +111,10 @@ void binFit() {
   RooPlot *fullDataFit = Lambda_cplus_M.frame(Title("-Title-"));
   //ds.plotOn(frame,Binning(25)); //default is 100 bins
   ds.plotOn(fullDataFit, Name("data"), MarkerColor(kBlack)) ;
-  ds.statOn(fullDataFit, Layout(0.65,0.88,0.2), What("N")) ; //NB Layout(xmin,xmax,ymax)
+  ds.statOn(fullDataFit, Layout(0.65,0.88,0.9), What("N")) ; //NB Layout(xmin,xmax,ymax)
   model.plotOn(fullDataFit, Name("Model"), DrawOption("L")) ;
   model.plotOn(fullDataFit, Components(expo_bkg), LineStyle(kDashed)) ;
-  model.paramOn(fullDataFit,Layout(0.19, 0.45, 0.88)) ; //was 0.4
+  model.paramOn(fullDataFit,Layout(0.2, 0.5, 0.88)) ; //was 0.4
   fullDataFit->getAttText()->SetTextSize(0.022) ;
 
   RooDataHist hist4Chi2("hist4Chi2","hist4Chi2", RooArgSet(Lambda_cplus_M), ds) ;
@@ -132,14 +132,14 @@ void binFit() {
 
 
   // Create array of signal candidates in TAU variable.
-  int nBins=10 ;      // If you change this, rememeber to change array sizes below!
+  int nBins=20 ;      // If you change this, rememeber to change (*) array sizes below AND (**) h_Signal histogram!
   
 
 
   // Create arrays to store signal yield and error for each bin. 
-  double signalYield[10] ;
-  double signalError[10] ;
-  double binCent[10] ;      // to record centre of bin.
+  double signalYield[20] ;  // (*)
+  double signalError[20] ;
+  double binCent[20] ;      // to record centre of bin.
 
   // Split data into 'TAU' bins, make mass fits to individual bins and store signal 
   // yields in array.
@@ -180,7 +180,7 @@ void binFit() {
 
 }
 
-  TH1D *h_Signal = new TH1D("h_Signal","h_Signal",10 ,0.00025 ,0.002) ;
+  TH1D *h_Signal = new TH1D("h_Signal","h_Signal",20 ,0.00025 ,0.002) ; // (**)
   int j ;
   int tempnumber ;
     // Fill histogram
@@ -194,9 +194,9 @@ void binFit() {
   // Create and fill histogram with signal yields and errors calculated 
   // from the fits made in the 'for' loop, above.
 
-  TFile hf("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/histoTAU_Lambda_cplus_SigOnly_cut01.root", "RECREATE") ;
+  TFile hf("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/histoTAU_Lambda_cplus_SigOnly_cut04_20bins.root", "RECREATE") ;
   h_Signal->Write() ;
-  cout<<"histogram written (/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/histoTAU_Lambda_cplus_SigOnly_cut01.root)"<<endl ;
+  cout<<"histogram written..."<<endl ;
   //h_Signal->Draw();
 
 
@@ -228,7 +228,7 @@ void binFit() {
   vis_lifetimePlot->Draw() ;
 
   c102->Update() ;
-  c102->SaveAs("visConf_cut01.pdf") ;
+  c102->SaveAs("visConf_cut04_20bins.pdf") ;
 
   // Print useful info to screen
 
@@ -250,7 +250,7 @@ void binFit() {
     cout<<"Bin number "<<k+1<<" (bin centre = "<<binCent[k]*1000<<"ps):"<<endl;
     cout<<"   "<<"signal yield = "<<signalYield[k]<<endl ;
     cout<<"   "<<"signal error = "<<signalError[k]<<endl ;
-  };
+  }
  
 
     /*

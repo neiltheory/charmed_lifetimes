@@ -28,8 +28,8 @@ void sWeigher() {
 
 
 
-  TFile *datafile = TFile::Open("~/Documents/uni/LHCb_CharmSummerProj/learning_root/turbo_M_TAU_cut01.root") ; // opens 'reduced' data.
-  //TFile *datafile = TFile::Open("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/turbo_M_TAU_cut01.root") ;  
+  //TFile *datafile = TFile::Open("~/Documents/uni/LHCb_CharmSummerProj/learning_root/turbo_M_TAU_cut01.root") ; // opens 'reduced' data.
+  TFile *datafile = TFile::Open("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/turbo_M_TAU_cut01.root") ;  
 
 
   // Define dataset
@@ -218,7 +218,7 @@ void sWeigher() {
   TCanvas *c2 = new TCanvas("c2","",900,600) ;
   //gStyle->SetOptStat("") ; // on in 02
   fullDataFit->Draw() ;
-  c2->Print("SignalAndBkg05.pdf");
+  c2->Print("SignalAndBkg06.pdf");
 
 }
 

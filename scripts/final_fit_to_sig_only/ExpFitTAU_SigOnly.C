@@ -29,7 +29,7 @@ void lifetimeFit()
 {
 
   // Import file.  
-  TFile f("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/histoTAU_Lambda_cplus_SigOnly_cut01.root") ;
+  TFile f("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/histoTAU_Lambda_cplus_SigOnly_cut04_20bins.root") ;
   
   TH1F *h_signal = (TH1F*)f.Get("h_Signal"); // gets the histogram of signal yields from the .root file
 
@@ -70,7 +70,7 @@ void lifetimeFit()
 
 
   // Save file as .pdf
-  c1.SaveAs("histo_Lambda_cplus_TAU_lifetime_SigOnly_cut01FITTED.pdf") ;
+  c1.SaveAs("histo_Lambda_cplus_TAU_lifetime_SigOnly_cut04FITTED.pdf") ;
 
 }
 

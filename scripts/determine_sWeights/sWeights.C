@@ -13,6 +13,7 @@
 #include "RooAddPdf.h"
 #include "RooExponential.h"
 #include "RooPolynomial.h"
+#include "TLatex.h"
 
 using namespace std ;
 using namespace RooFit ;
@@ -37,7 +38,7 @@ void sWeigher() {
 
 
   // Define TAU variable, get limits.
-  RooRealVar Lambda_cplus_TAU("Lambda_cplus_TAU","Lambda_cplus_TAU",0.00025 ,0.002 ,"ns") ; 
+  RooRealVar Lambda_cplus_TAU("Lambda_cplus_TAU","Lambda_cplus_TAU",0.00025 ,0.002 ,"ns") ;
   double highestTAU;
   double lowestTAU;
   ds->RooAbsData::getRange(Lambda_cplus_TAU, lowestTAU, highestTAU);
@@ -55,22 +56,22 @@ void sWeigher() {
   // Build combined double Gaussian PDF; "gaussComb". 
   double mass_peak = 2286 ;  // initialize gaussian mean value for fit for Lambda_cplus
 
-  RooRealVar gausMean1("gausMean1", "gausMean1",mass_peak, lowestM, highestM, "GeV") ;
+  RooRealVar mean1("mean1", "mean1",mass_peak, lowestM, highestM, "GeV") ;
   RooRealVar sigma1("sigma1","sigma1", 6, 0, 50) ;
-  RooGaussian gauss1("gauss1","gauss1",Lambda_cplus_M, gausMean1, sigma1) ;
+  RooGaussian gauss1("gauss1","gauss1",Lambda_cplus_M, mean1, sigma1) ;
 
-  RooRealVar gausMean2("gausMean2", "gausMean2",mass_peak, lowestM, highestM, "GeV") ;
+  RooRealVar mean2("mean2", "mean2",mass_peak, lowestM, highestM, "GeV") ;
   RooRealVar sigma2("sigma2","sigma2", 4, 0, 100) ;
-  RooGaussian gauss2("gauss2","gauss2",Lambda_cplus_M, gausMean2, sigma2) ;
+  RooGaussian gauss2("gauss2","gauss2",Lambda_cplus_M, mean2, sigma2) ;
 
-  RooRealVar nFrac("nFrac", "nFrac", 0.5, 0.0, 1.) ;
-  RooAddPdf gaussComb("gaussComb","gaussComb", RooArgList(gauss1, gauss2), RooArgList(nFrac)) ;
+  RooRealVar Gaussian1_fraction("Gaussian1_fraction", "Gaussian1_fraction", 0.5, 0.0, 1.) ;
+  RooAddPdf gaussComb("gaussComb","gaussComb", RooArgList(gauss1, gauss2), RooArgList(Gaussian1_fraction)) ;
 
 
    
   // Build exponential PDF; "expo_bkg"
-  RooRealVar expoPar("expoPar","expoPar", -0.0001, -1., 0.);
-  RooExponential expo_bkg("expo_bkg", "expo_bkg", Lambda_cplus_M, expoPar);
+  RooRealVar alpha("alpha","alpha", -0.0001, -1., 0.);
+  RooExponential expo_bkg("expo_bkg", "expo_bkg", Lambda_cplus_M, alpha);
 
 
   // Build model PDF
@@ -85,7 +86,7 @@ void sWeigher() {
 
   // Fit model
   model.fitTo(*ds, Extended()) ;
-  params = RooArgSet(gausMean1, gausMean2, sigma1, sigma2, nFrac) ;
+  params = RooArgSet(mean1, mean2, sigma1, sigma2, Gaussian1_fraction) ;
 
 
   // Plot
@@ -94,12 +95,12 @@ void sWeigher() {
   ds->plotOn(fullDataFit, Name("data"), MarkerColor(kBlack)) ;
   ds->statOn(fullDataFit, Layout(0.65,0.88,0.2), What("N")) ; //NB Layout(xmin,xmax,ymax)
   model.plotOn(fullDataFit, Name("Model"), DrawOption("L")) ;
-  model.plotOn(fullDataFit, Components(expo_bkg), LineStyle(kDashed)) ;
-  model.plotOn(fullDataFit, Components(gaussComb), LineStyle(kDashed)) ;
+  model.plotOn(fullDataFit, Name("Background"),Components(expo_bkg), LineStyle(kDashed), LineColor(kRed)) ;
+  model.plotOn(fullDataFit, Name("Signal"),Components(gaussComb), LineStyle(kDashed), LineColor(kGreen-2)) ;
   //model.paramOn(fullDataFit,Layout(0.19, 0.45, 0.88)) ;
   //model.paramOn(fullDataFit,Layout(0.19, 0.4, 0.88)) ;
   //model.paramOn(fullDataFit,Layout(0.18, 0.41, 0.88)) ;
-  model.paramOn(fullDataFit,Layout(0.15, 0.41, 0.88), Parameters(params)) ;
+  model.paramOn(fullDataFit,Layout(0.15, 0.45, 0.88), Parameters(params)) ;
   
 
   fullDataFit->getAttText()->SetTextSize(0.028) ; //was 0.025, then 0.03, then 0.027
@@ -109,14 +110,13 @@ void sWeigher() {
   fullDataFit->SetTitleOffset(1.3,"X") ; //was 1.01, then 1.1 
 
 
-
   // Set model fit variables to constants (NOT COEFFs!) ; this is important for the sPlot function below.
-  gausMean1.setConstant() ;
-  gausMean2.setConstant() ;
+  mean1.setConstant() ;
+  mean2.setConstant() ;
   sigma1.setConstant() ;
   sigma2.setConstant() ;
-  nFrac.setConstant() ;
-  expoPar.setConstant() ;
+  Gaussian1_fraction.setConstant() ;
+  alpha.setConstant() ;
 
 
 
@@ -127,7 +127,7 @@ void sWeigher() {
   double Ntot = ds->numEntries() ;
   double sigma = sigma1.getVal() ;
   double pm = 3.0*sigma ;
-  double mean = gausMean1.getVal() ;
+  double mean = mean1.getVal() ;
   double R1Low = mean - pm ;
   double R1Hi = mean + pm ;
 
@@ -193,13 +193,13 @@ void sWeigher() {
   // Print info to screen
   cout<<endl<<endl<<"========== ROOFIT INFO ==========="<<endl<<endl ;
   cout<<":::Double Gaussian fit parameters to full data (signal + background):"<<endl;
-  cout<<gausMean1<<endl ;
-  cout<<gausMean2<<endl ;
+  cout<<mean1<<endl ;
+  cout<<mean2<<endl ;
   cout<<sigma1<<endl ;
   cout<<sigma2<<endl ;
-  cout<<nFrac<<endl<<endl ;
+  cout<<Gaussian1_fraction<<endl<<endl ;
   cout<<":::Exponential fit parameters to full data (signal + background):"<<endl;
-  cout<<expoPar<<endl<<endl<<endl ;
+  cout<<alpha<<endl<<endl<<endl ;
   cout<<"========== Signal and Background yields INFO ========"<<endl ;
   // Check the values of the yields from the fit and the yields from the sWeight are the same
   cout<<"1) Yield of signal is: "<<nSignal.getVal()<<"; from sWeights it is: "
@@ -218,7 +218,27 @@ void sWeigher() {
   TCanvas *c2 = new TCanvas("c2","",900,600) ;
   //gStyle->SetOptStat("") ; // on in 02
   fullDataFit->Draw() ;
-  c2->Print("SignalAndBkg06.pdf");
+
+  //TLatex Tl ;
+  //Tl.SetNDC() ;
+  //Tl.SetTextSize(0.07) ;
+  //Tl.DrawLatex(0.69, 0.75, "#scale[1.1]{#Lambda^{+}_{c}} (udc)") ;
+  //Tl.DrawLatex(0.69, 0.8, "#scale[1.1]{#Lambda^{+}_{c}} (udc)") ;
+  //Tl.DrawLatex(0.69, 0.6, "mass resonance") ;
+
+  TLegend* leg = new TLegend(0.6, 0.6,0.8,0.85,"#Lambda^{+}_{c} (udc) resonance") ; // (x1,y1,x2,y2)
+  leg->SetTextFont(42) ;
+  //  leg->SetBorderSize(0) ;
+  leg->SetTextSize(0.04) ;
+  leg->SetFillColor(kWhite);
+  leg->SetLineColor(kWhite);
+  leg->AddEntry(Model, "model fit", "lp");
+  leg->AddEntry(Background, "background", "lp");
+  leg->AddEntry(Signal, "signal", "lp");
+  leg->Draw();
+  //return c2;
+
+  c2->SaveAs("Lambda_fullfit.pdf");
 
 }
 

@@ -29,8 +29,8 @@ void sWeigher() {
 
 
 
-  //TFile *datafile = TFile::Open("~/Documents/uni/LHCb_CharmSummerProj/learning_root/turbo_M_TAU_cut01.root") ; // opens 'reduced' data.
-  TFile *datafile = TFile::Open("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/turbo_M_TAU_cut01.root") ;  
+  TFile *datafile = TFile::Open("~/Documents/uni/LHCb_CharmSummerProj/learning_root/turbo_M_TAU_cut01.root") ; // opens 'reduced' data.
+  //TFile *datafile = TFile::Open("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/turbo_M_TAU_cut01.root") ;  
 
 
   // Define dataset
@@ -70,8 +70,8 @@ void sWeigher() {
 
    
   // Build exponential PDF; "expo_bkg"
-  RooRealVar alpha("alpha","alpha", -0.0001, -1., 0.);
-  RooExponential expo_bkg("expo_bkg", "expo_bkg", Lambda_cplus_M, alpha);
+  RooRealVar exp_const("exp_const","exp_const", -0.0001, -1., 0.);
+  RooExponential expo_bkg("expo_bkg", "expo_bkg", Lambda_cplus_M, exp_const);
 
 
   // Build model PDF
@@ -86,7 +86,7 @@ void sWeigher() {
 
   // Fit model
   model.fitTo(*ds, Extended()) ;
-  params = RooArgSet(mean1, mean2, sigma1, sigma2, Gaussian1_fraction) ;
+  params = RooArgSet(mean1, mean2, sigma1, sigma2, Gaussian1_fraction, exp_const) ;
 
 
   // Plot
@@ -116,7 +116,7 @@ void sWeigher() {
   sigma1.setConstant() ;
   sigma2.setConstant() ;
   Gaussian1_fraction.setConstant() ;
-  alpha.setConstant() ;
+  exp_const.setConstant() ;
 
 
 
@@ -192,6 +192,7 @@ void sWeigher() {
 
   // Print info to screen
   cout<<endl<<endl<<"========== ROOFIT INFO ==========="<<endl<<endl ;
+  cout<<"RooFit Chi2 is = "<<fullDataFit->chiSquare()<<endl ;
   cout<<":::Double Gaussian fit parameters to full data (signal + background):"<<endl;
   cout<<mean1<<endl ;
   cout<<mean2<<endl ;
@@ -199,7 +200,7 @@ void sWeigher() {
   cout<<sigma2<<endl ;
   cout<<Gaussian1_fraction<<endl<<endl ;
   cout<<":::Exponential fit parameters to full data (signal + background):"<<endl;
-  cout<<alpha<<endl<<endl<<endl ;
+  cout<<exp_const<<endl<<endl<<endl ;
   cout<<"========== Signal and Background yields INFO ========"<<endl ;
   // Check the values of the yields from the fit and the yields from the sWeight are the same
   cout<<"1) Yield of signal is: "<<nSignal.getVal()<<"; from sWeights it is: "

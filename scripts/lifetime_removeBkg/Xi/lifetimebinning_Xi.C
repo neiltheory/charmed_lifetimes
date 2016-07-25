@@ -36,7 +36,7 @@ void binFit() {
   // Open appropriate .root file.
   //TFile *datafile = TFile::Open("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/turbo_2015_data_wAngVars_wBDTGWeights.root") ;
   TFile *datafile = TFile::Open("~/Documents/uni/LHCb_CharmSummerProj/learning_root/turbo_2015_data_wAngVars_wBDTGWeights.root") ;
-
+ 
 
   // Define and fill Tree.
    TTree* mytree = (TTree*) datafile->Get("DecayTree");
@@ -47,7 +47,8 @@ void binFit() {
   double highestTAU;
   double lowestTAU;
 
-  RooRealVar Lambda_cplus_M("Lambda_cplus_M","Lambda_cplus_M",2420 ,2520, "MeV") ; 
+  //RooRealVar Lambda_cplus_M("Lambda_cplus_M","Lambda_cplus_M",2420 ,2520, "MeV") ; // +/-50MeV  //CHANGE
+  RooRealVar Lambda_cplus_M("Lambda_cplus_M","Lambda_cplus_M",2400 ,2540, "MeV") ;   // +/-70MeV
   double highestM;
   double lowestM;
 
@@ -56,10 +57,10 @@ void binFit() {
   RooRealVar BDTG("BDTG","BDTG",-1. ,1.) ; 
 
 
-  // Define dataset and make cuts.
+  // Define dataset and make cuts. //CHANGE
   //RooDataSet* ds = (RooDataSet*)datafile->Get("ds") ;
-  RooDataSet ds("ds","ds",RooArgSet(Lambda_cplus_TAU, Lambda_cplus_M, Lambda_cplus_IPCHI2_OWNPV, BDTG),Import(*mytree),Cut("(0.00025<Lambda_cplus_TAU)&&(Lambda_cplus_TAU<0.002)&&(Lambda_cplus_M<2520)&&(2420<Lambda_cplus_M)&&(0.3541<BDTG)&&(Lambda_cplus_IPCHI2_OWNPV<3)")) ;  //+/-50MeV
-  //RooDataSet ds("ds","ds",RooArgSet(Lambda_cplus_TAU, Lambda_cplus_M, Lambda_cplus_IPCHI2_OWNPV, BDTG),Import(*mytree),Cut("(0.00025<Lambda_cplus_TAU)&&(Lambda_cplus_TAU<0.002)&&(Lambda_cplus_M<2540)&&(2400<Lambda_cplus_M)&&(0.3541<BDTG)&&(Lambda_cplus_IPCHI2_OWNPV<3)")) ;  //+/-70MeV
+  //RooDataSet ds("ds","ds",RooArgSet(Lambda_cplus_TAU, Lambda_cplus_M, Lambda_cplus_IPCHI2_OWNPV, BDTG),Import(*mytree),Cut("(0.00025<Lambda_cplus_TAU)&&(Lambda_cplus_TAU<0.002)&&(Lambda_cplus_M<2520)&&(2420<Lambda_cplus_M)&&(0.3541<BDTG)&&(Lambda_cplus_IPCHI2_OWNPV<3)")) ;  //+/-50MeV
+  RooDataSet ds("ds","ds",RooArgSet(Lambda_cplus_TAU, Lambda_cplus_M, Lambda_cplus_IPCHI2_OWNPV, BDTG),Import(*mytree),Cut("(0.00025<Lambda_cplus_TAU)&&(Lambda_cplus_TAU<0.002)&&(Lambda_cplus_M<2540)&&(2400<Lambda_cplus_M)&&(0.3541<BDTG)&&(Lambda_cplus_IPCHI2_OWNPV<3)")) ;  //+/-70MeV
   //NB (for Neil): cut01=0.1506<BDTG; cut02=0.4250<BDTG; cut04=0.3541
 
   // Build probability density functions (PDFs).
@@ -108,7 +109,8 @@ void binFit() {
   model.plotOn(fullDataFit, Name("Model"), DrawOption("L")) ;
   fullDataFit->GetYaxis()->SetTitleOffset(1.4);
   fullDataFit->SetXTitle("mass (MeV)") ;
-  fullDataFit->SetYTitle("Entries per bin (bin size: 1 MeV)") ; //CHANGE
+  //  fullDataFit->SetYTitle("Entries per bin (bin size: 1 MeV)") ; // +/-50MeV //CHANGE
+  fullDataFit->SetYTitle("Entries per bin (bin size: 1.4 MeV)") ;   // +/-70MeV
   
   //=======here=============
   /*
@@ -143,8 +145,8 @@ void binFit() {
   frame3->SetYTitle("Mass Pull (#Xi_{c}^{+})") ;
   frame3->GetYaxis()->SetTitleOffset(1.4) ; 
   frame3->Draw() ;
-  c2->SaveAs("res_pull_xiM_IPCHI3_PM50_20bins_snglgaus.pdf") ;
-  //c2->SaveAs("res_pull_xiM_IPCHI3_PM70_20bins_snglgaus.pdf") ;
+  //c2->SaveAs("res_pull_xiM_IPCHI3_PM50_20bins_snglgaus.pdf") ;  //CHANGE
+  c2->SaveAs("res_pull_xiM_IPCHI3_PM70_20bins_snglgaus.pdf") ;
 
   //=========HERE==========
   model.plotOn(fullDataFit, Components(expo_bkg), LineStyle(kDashed)) ;
@@ -233,8 +235,8 @@ void binFit() {
   // from the fits made in the 'for' loop, above.
 
   //TFile hf("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/histoTAU_Xi_cplus_SigOnly_cut04_20bins_snglgaus.root", "RECREATE") ;
-  TFile hf("~/Documents/uni/LHCb_CharmSummerProj/learning_root/histoTAU_Xi_cplus_SigOnly_20bins_IPCHI3_PM50_snglgaus.root", "RECREATE") ;
-  //TFile hf("~/Documents/uni/LHCb_CharmSummerProj/learning_root/histoTAU_Xi_cplus_SigOnly_20bins_IPCHI3_PM70_snglgaus.root", "RECREATE") ;
+  //TFile hf("~/Documents/uni/LHCb_CharmSummerProj/learning_root/histoTAU_Xi_cplus_SigOnly_20bins_IPCHI3_PM50_snglgaus.root", "RECREATE") ;  //CHANGE
+  TFile hf("~/Documents/uni/LHCb_CharmSummerProj/learning_root/histoTAU_Xi_cplus_SigOnly_20bins_IPCHI3_PM70_snglgaus.root", "RECREATE") ;
   h_Signal->Write() ;
   cout<<"histogram written..."<<endl ;
   //h_Signal->Draw();
@@ -260,7 +262,8 @@ void binFit() {
 
   TCanvas *c4 = new TCanvas(" ", " ",900, 600) ;
   fullDataFit->Draw() ;
-  c4->SaveAs("FullFit_Xi_IPCHI3_PM50_snglgaus.pdf") ;
+  //c4->SaveAs("FullFit_Xi_IPCHI3_PM50_snglgaus.pdf") ; //CHANGE
+  c4->SaveAs("FullFit_Xi_IPCHI3_PM70_snglgaus.pdf") ;
 
 
   TCanvas *c102 = new TCanvas("c102","",600,900) ;
@@ -276,8 +279,8 @@ void binFit() {
   vis_lifetimePlot->Draw() ;
 
   c102->Update() ;
-  c102->SaveAs("visConfXi_20bins_IPCHI3_PM50_snglgaus.pdf") ;
-  //c102->SaveAs("visConfXi_20bins_IPCHI3_PM70_snglgaus.pdf") ;
+  //c102->SaveAs("visConfXi_20bins_IPCHI3_PM50_snglgaus.pdf") ;  //CHANGE
+  c102->SaveAs("visConfXi_20bins_IPCHI3_PM70_snglgaus.pdf") ;
 
   // Print useful info to screen
 

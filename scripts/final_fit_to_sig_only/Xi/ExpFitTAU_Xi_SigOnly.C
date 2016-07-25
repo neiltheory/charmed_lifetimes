@@ -30,8 +30,8 @@ void lifetimeFit()
   gROOT->SetBatch(kTRUE) ;
   // Import file.
   //TFile f("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/histoTAU_Xi_cplus_SigOnly_cut05_20bins_snglgaus.root") ;
-  //TFile f("~/Documents/uni/LHCb_CharmSummerProj/learning_root/histoTAU_Xi_cplus_SigOnly_20bins_IPCHI3_PM50_snglgaus.root") ;
-TFile f("~/Documents/uni/LHCb_CharmSummerProj/learning_root/histoTAU_Xi_cplus_SigOnly_20bins_IPCHI3_PM70_snglgaus.root") ;
+  //TFile f("~/Documents/uni/LHCb_CharmSummerProj/learning_root/histoTAU_Xi_cplus_SigOnly_20bins_IPCHI3_PM50_snglgaus.root") ; //CHANGE
+  TFile f("~/Documents/uni/LHCb_CharmSummerProj/learning_root/histoTAU_Xi_cplus_SigOnly_20bins_IPCHI3_PM70_snglgaus.root") ;
   
   TH1F *h_signal = (TH1F*)f.Get("h_Signal");  // gets the histogram of signal yields from the .root file
 
@@ -78,7 +78,8 @@ TFile f("~/Documents/uni/LHCb_CharmSummerProj/learning_root/histoTAU_Xi_cplus_Si
   Tl.DrawLatex(0.55, 0.75, "#scale[1.1]{#tau_{#Xi_{c}^{+}}} = 0.525362  #pm 0.027682 #font[12]{ps}") ;
   Tl.DrawLatex(0.55, 0.67, "#chi^{2} = 0.7872") ;
   // Save file as .pdf
-  c1->SaveAs("histoTAU_Xi_cplus_SigOnly_IPCHI3_PM70_20bins_snglgausFITTED.pdf") ;
+  //c1->SaveAs("histoTAU_Xi_cplus_SigOnly_IPCHI3_PM50_20bins_snglgausFITTED.pdf") ; //CHANGE
+  c1->SaveAs("histoTAU_Xi_cplus_SigOnly_IPCHI3_PM70_20bins_snglgausFITTED.pdf") ; 
  
   //______________________________________________________
   
@@ -102,6 +103,7 @@ TFile f("~/Documents/uni/LHCb_CharmSummerProj/learning_root/histoTAU_Xi_cplus_Si
   frame3->Draw() ;
   //c2->cd(2) ; gPad->SetLeftMargin(0.15) ; frame3->GetYaxis()->SetTitleOffset(1.6) ; frame3->Draw() ;
 
+  //c2->SaveAs("res_pull_xiTAU_IPCHI3_PM50_20bins_snglgaus.pdf") ; //CHANGE
   c2->SaveAs("res_pull_xiTAU_IPCHI3_PM70_20bins_snglgaus.pdf") ;
   //______________________________________________________
   

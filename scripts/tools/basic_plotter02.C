@@ -54,7 +54,7 @@ void basic_plotter()
   data.statOn(frame, What("N"), Layout(0.7, 0.94,0.9)) ; 
  //gauss.plotOn(frame) ;
   frame->SetXTitle("Mass (MeV)") ;
-  frame->SetYTitle("Number of Events") ;
+  frame->SetYTitle("Entries per bin") ;
 
   // A d d   b o x   w i t h   p d f   p a r a m e t e r s 
   // -----------------------------------------------------
@@ -88,7 +88,7 @@ void basic_plotter()
 
   
   // Add Lambda_cplus arrow to frame
-  TArrow* Lambda_arrow = new TArrow(2350,26000,2290,22500,0.02,"|>") ;
+  TArrow* Lambda_arrow = new TArrow(2350,26000,2300,22500,0.02,"|>") ;
   Lambda_arrow->SetLineColor(kRed) ;
   Lambda_arrow->SetFillColor(kRed) ;
   Lambda_arrow->SetLineWidth(3) ;
@@ -102,15 +102,21 @@ void basic_plotter()
   // root> TFile f("rf106_plotdecoration.root") ;
   // root>  xframe->Draw() ;
 
-  new TCanvas("plotwithdecoration","plotwithdecoration",900,600) ;
+TCanvas *c1 = new TCanvas("plotwithdecoration","plotwithdecoration",900,600) ;
   gPad->SetLeftMargin(0.15) ; frame->GetYaxis()->SetTitleOffset(1.6) ; frame->Draw() ;
+  gPad->SetGrid(1,0) ;
+  c1->GetXaxis()->SetAxisColor(17);
+  c1->GetYaxis()->SetAxisColor(17);
+
+
 
   TLatex Tl ;
   Tl.SetNDC() ;
   Tl.SetTextSize(0.05) ;
-  Tl.DrawLatex(0.6, 0.6, "#scale[1.1]{#Xi^{+}_{c}} (usc) resonance") ;
-  Tl.DrawLatex(0.45, 0.75, "#scale[1.1]{#Lambda^{+}_{c}} (udc) resonance") ;
+  Tl.DrawLatex(0.6, 0.6, "#scale[1.1]{#Xi^{+}_{c}} resonance") ;
+  Tl.DrawLatex(0.45, 0.75, "#scale[1.1]{#Lambda^{+}_{c}} resonance") ;
   //Tl.DrawLatex(0.69, 0.8, "#scale[1.1]{#Lambda^{+}_{c}} (udc)") ;
   //Tl.DrawLatex(0.69, 0.6, "mass resonance") ;
-  frame->SaveAs("test.pdf") ;
+  cout<<"saving..."<<endl ;  
+c1->SaveAs("FullData_wArrows01.pdf") ;
 }

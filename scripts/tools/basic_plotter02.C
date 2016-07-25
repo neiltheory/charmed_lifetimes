@@ -1,4 +1,3 @@
-
 #ifndef __CINT__
 #include "RooGlobalFunc.h"
 #endif
@@ -54,7 +53,7 @@ void basic_plotter()
   //data.statOn(frame, What("N"), Layout(0.55, 0.8,0.8)) ; 
   data.statOn(frame, What("N"), Layout(0.7, 0.94,0.9)) ; 
  //gauss.plotOn(frame) ;
-  frame->SetXTitle("Mass (GeV)") ;
+  frame->SetXTitle("Mass (MeV)") ;
   frame->SetYTitle("Number of Events") ;
 
   // A d d   b o x   w i t h   p d f   p a r a m e t e r s 
@@ -95,19 +94,15 @@ void basic_plotter()
   Lambda_arrow->SetLineWidth(3) ;
   frame->addObject(Lambda_arrow) ;
   
-
-  // P e r s i s t   f r a m e   w i t h   a l l   d e c o r a t i o n s   i n   R O O T   f i l e
-  // ---------------------------------------------------------------------------------------------
-
-  TFile f("rf106_plotdecoration.root","RECREATE") ;
-  frame->Write() ;
-  f.Close() ;
+  //TFile f("rf106_plotdecoration.root","RECREATE") ;
+  //frame->Write() ;
+  //f.Close() ;
 
   // To read back and plot frame with all decorations in clean root session do
   // root> TFile f("rf106_plotdecoration.root") ;
   // root>  xframe->Draw() ;
 
-  new TCanvas("rf106_plotdecoration","rf106_plotdecoration",900,600) ;
+  new TCanvas("plotwithdecoration","plotwithdecoration",900,600) ;
   gPad->SetLeftMargin(0.15) ; frame->GetYaxis()->SetTitleOffset(1.6) ; frame->Draw() ;
 
   TLatex Tl ;
@@ -117,5 +112,5 @@ void basic_plotter()
   Tl.DrawLatex(0.45, 0.75, "#scale[1.1]{#Lambda^{+}_{c}} (udc) resonance") ;
   //Tl.DrawLatex(0.69, 0.8, "#scale[1.1]{#Lambda^{+}_{c}} (udc)") ;
   //Tl.DrawLatex(0.69, 0.6, "mass resonance") ;
-  
+  frame->SaveAs("test.pdf") ;
 }

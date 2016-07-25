@@ -47,7 +47,7 @@ void binFit() {
   double highestTAU;
   double lowestTAU;
 
-  RooRealVar Lambda_cplus_M("Lambda_cplus_M","Lambda_cplus_M",2216 ,2356, "GeV") ; 
+  RooRealVar Lambda_cplus_M("Lambda_cplus_M","Lambda_cplus_M",2216 ,2356, "MeV") ; 
   double highestM;
   double lowestM;
 
@@ -68,11 +68,11 @@ void binFit() {
   ds.RooAbsData::getRange(Lambda_cplus_M, lowestM, highestM) ;
   double mass_peak = 2286 ;  // initial mean value for fit (from theory)
 
-  RooRealVar gausMean1("gausMean1", "gausMean1",mass_peak, lowestM, highestM, "GeV") ;
+  RooRealVar gausMean1("gausMean1", "gausMean1",mass_peak, lowestM, highestM, "MeV") ;
   RooRealVar sigma1("sigma1","sigma1", 6, 0, 50) ;
   RooGaussian gauss1("gauss1","gauss1",Lambda_cplus_M, gausMean1, sigma1) ;
 
-  RooRealVar gausMean2("gausMean2", "gausMean2",mass_peak, lowestM, highestM, "GeV") ;
+  RooRealVar gausMean2("gausMean2", "gausMean2",mass_peak, lowestM, highestM, "MeV") ;
   RooRealVar sigma2("sigma2","sigma2", 4, 0, 100) ;
   RooGaussian gauss2("gauss2","gauss2",Lambda_cplus_M, gausMean2, sigma2) ;
 

@@ -34,7 +34,8 @@ void binFit() {
   gROOT->SetBatch(kTRUE); // stops "visial confirmation plots" being shown onscreen.
 
   // Open appropriate .root file.
-  TFile *datafile = TFile::Open("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/turbo_2015_data_wAngVars_wBDTGWeights.root") ;
+  //TFile *datafile = TFile::Open("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/turbo_2015_data_wAngVars_wBDTGWeights.root") ;
+  TFile *datafile = TFile::Open("~/Documents/uni/LHCb_CharmSummerProj/learning_root/turbo_2015_data_wAngVars_wBDTGWeights.root") ;
 
 
   // Define and fill Tree.
@@ -57,8 +58,9 @@ void binFit() {
 
   // Define dataset and make cuts.
   //RooDataSet* ds = (RooDataSet*)datafile->Get("ds") ;
-  RooDataSet ds("ds","ds",RooArgSet(Lambda_cplus_TAU, Lambda_cplus_M, Lambda_cplus_IPCHI2_OWNPV, BDTG),Import(*mytree),Cut("(0.00025<Lambda_cplus_TAU)&&(Lambda_cplus_TAU<0.002)&&(Lambda_cplus_M<2520)&&(2420<Lambda_cplus_M)&&(0.3541<BDTG)&&(Lambda_cplus_IPCHI2_OWNPV<3)")) ;  //NB (for Neil): cut01=0.1506<BDTG; cut02=0.4250<BDTG; cut04=0.3541
-
+  //  RooDataSet ds("ds","ds",RooArgSet(Lambda_cplus_TAU, Lambda_cplus_M, Lambda_cplus_IPCHI2_OWNPV, BDTG),Import(*mytree),Cut("(0.00025<Lambda_cplus_TAU)&&(Lambda_cplus_TAU<0.002)&&(Lambda_cplus_M<2520)&&(2420<Lambda_cplus_M)&&(0.3541<BDTG)&&(Lambda_cplus_IPCHI2_OWNPV<3)")) ;  //+/-50MeV
+  RooDataSet ds("ds","ds",RooArgSet(Lambda_cplus_TAU, Lambda_cplus_M, Lambda_cplus_IPCHI2_OWNPV, BDTG),Import(*mytree),Cut("(0.00025<Lambda_cplus_TAU)&&(Lambda_cplus_TAU<0.002)&&(Lambda_cplus_M<2540)&&(2400<Lambda_cplus_M)&&(0.3541<BDTG)&&(Lambda_cplus_IPCHI2_OWNPV<3)")) ;  //+/-70MeV
+  //NB (for Neil): cut01=0.1506<BDTG; cut02=0.4250<BDTG; cut04=0.3541
 
   // Build probability density functions (PDFs).
   // Combined double Gaussian PDF.
@@ -120,11 +122,12 @@ void binFit() {
   c2->Divide(2) ;
   c2->cd(1) ; gPad->SetLeftMargin(0.15) ; frame2->GetYaxis()->SetTitleOffset(1.6) ; frame2->Draw() ;
   c2->cd(2) ; gPad->SetLeftMargin(0.15) ; frame3->GetYaxis()->SetTitleOffset(1.6) ; frame3->Draw() ;
-  c2->SaveAs("res_pull_xi_cut04__20bins_snglgaus.pdf") ;
+  // c2->SaveAs("res_pull_xiM_IPCHI3_PM50_20bins_snglgaus.pdf") ;
+ c2->SaveAs("res_pull_xiM_IPCHI3_PM70_20bins_snglgaus.pdf") ;
   //______________________________________________________
 
   model.plotOn(fullDataFit, Components(expo_bkg), LineStyle(kDashed)) ;
-  model.paramOn(fullDataFit,Layout(0.19, 0.45, 0.88)) ; //was 0.4
+  model.paramOn(fullDataFit,Layout(0.19, 0.45, 0.88)) ;
   fullDataFit->getAttText()->SetTextSize(0.022) ;
 
 
@@ -210,7 +213,9 @@ void binFit() {
   // Create and fill histogram with signal yields and errors calculated 
   // from the fits made in the 'for' loop, above.
 
-  TFile hf("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/histoTAU_Xi_cplus_SigOnly_cut04_20bins_snglgaus.root", "RECREATE") ;
+  //TFile hf("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/histoTAU_Xi_cplus_SigOnly_cut04_20bins_snglgaus.root", "RECREATE") ;
+  //  TFile hf("~/Documents/uni/LHCb_CharmSummerProj/learning_root/histoTAU_Xi_cplus_SigOnly_20bins_IPCHI3_PM50_snglgaus.root", "RECREATE") ;
+  TFile hf("~/Documents/uni/LHCb_CharmSummerProj/learning_root/histoTAU_Xi_cplus_SigOnly_20bins_IPCHI3_PM70_snglgaus.root", "RECREATE") ;
   h_Signal->Write() ;
   cout<<"histogram written..."<<endl ;
   //h_Signal->Draw();
@@ -250,7 +255,8 @@ void binFit() {
   vis_lifetimePlot->Draw() ;
 
   c102->Update() ;
-  c102->SaveAs("visConfXi_cut04_20bins_snglgaus.pdf") ;
+  //  c102->SaveAs("visConfXi_20bins_IPCHI3_PM50_snglgaus.pdf") ;
+  c102->SaveAs("visConfXi_20bins_IPCHI3_PM70_snglgaus.pdf") ;
 
   // Print useful info to screen
 

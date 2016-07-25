@@ -35,7 +35,7 @@ void binFit() {
   //TFile *datafile = TFile::Open("~/Documents/uni/LHCb_CharmSummerProj/Gedcode/baryon-lifetimes-2015/data/run-II-data/datafileLambda_TAUmin200fs_max2200fs_Mmin2216_max2356.root");
   //TFile *datafile = TFile::Open("~/Documents/uni/LHCb_CharmSummerProj/Gedcode/baryon-lifetimes-2015/data/run-II-data/datafileLambda_TAUmin200fs_max2200fs_Mmin2216_max2356_CutIPCHI2lt3.root"); 
   //TFile *datafile = TFile::Open("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/TMVA_cut01_firsttry.root") ;
-TFile *datafile = TFile::Open("/afs/phas.gla.ac.uk/user/n/nwarr/TMVA_cut01_firsttry.root") ;
+TFile *datafile = TFile::Open("~/Documents/uni/LHCb_CharmSummerProj/learning_root/TMVA_cut01_firsttry.root") ;
 
 
   // Define and fill Tree.
@@ -183,8 +183,7 @@ TFile *datafile = TFile::Open("/afs/phas.gla.ac.uk/user/n/nwarr/TMVA_cut01_first
 
   TH1D *h_Signal = new TH1D("h_Signal","h_Signal",20 ,0.00025 ,0.002) ; // (**)
   int j ;
-  int tempnumber ;
-    // Fill histogram
+     // Fill histogram
   for (j=0; j<nBins; j++){
   h_Signal->SetBinContent(j+1, signalYield[j]) ;
   h_Signal->SetBinError(j+1, signalError[j]) ;
@@ -195,7 +194,8 @@ TFile *datafile = TFile::Open("/afs/phas.gla.ac.uk/user/n/nwarr/TMVA_cut01_first
   // Create and fill histogram with signal yields and errors calculated 
   // from the fits made in the 'for' loop, above.
 
-  TFile hf("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/histoTAU_Lambda_cplus_SigOnly_cut04_20bins.root", "RECREATE") ;
+  //  TFile hf("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/histoTAU_Lambda_cplus_SigOnly_cut04_20bins.root", "RECREATE") ;
+  TFile hf("~/Documents/uni/LHCb_CharmSummerProj/learning_root/histoTAU_Lambda_cplus_SigOnly_IPCHI3_PM70_20bins.root", "RECREATE") ;
   h_Signal->Write() ;
   cout<<"histogram written..."<<endl ;
   //h_Signal->Draw();
@@ -229,7 +229,7 @@ TFile *datafile = TFile::Open("/afs/phas.gla.ac.uk/user/n/nwarr/TMVA_cut01_first
   vis_lifetimePlot->Draw() ;
 
   c102->Update() ;
-  c102->SaveAs("visConf_cut04_20bins.pdf") ;
+  c102->SaveAs("visConf_Lambda_20bins_IPCHI3_PM70.pdf") ;
 
   // Print useful info to screen
 

@@ -27,9 +27,11 @@ using namespace RooFit ;
 
 void lifetimeFit()
 {
-
+  gROOT->SetBatch(kTRUE) ;
   // Import file.
-  TFile f("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/histoTAU_Xi_cplus_SigOnly_cut05_20bins_snglgaus.root") ;
+  //TFile f("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/histoTAU_Xi_cplus_SigOnly_cut05_20bins_snglgaus.root") ;
+  //TFile f("~/Documents/uni/LHCb_CharmSummerProj/learning_root/histoTAU_Xi_cplus_SigOnly_20bins_IPCHI3_PM50_snglgaus.root") ;
+TFile f("~/Documents/uni/LHCb_CharmSummerProj/learning_root/histoTAU_Xi_cplus_SigOnly_20bins_IPCHI3_PM70_snglgaus.root") ;
   
   TH1F *h_signal = (TH1F*)f.Get("h_Signal");  // gets the histogram of signal yields from the .root file
 
@@ -59,16 +61,24 @@ void lifetimeFit()
 
 
   // Plot
-  TCanvas c1;
-  RooPlot* lifetimePlot = tau.frame() ;
+  TCanvas* c1 = new TCanvas("taufit","taufit",900,600) ;
+  //TCanvas c1 ;
+  RooPlot* lifetimePlot = tau.frame(Title(" ")) ;
   binnedData.plotOn(lifetimePlot) ;
   lifetimePDF.plotOn(lifetimePlot);
   lifetimePlot->GetYaxis()->SetTitleOffset(1.4);
+  lifetimePlot->SetXTitle("time #font[12]{t} (#font[12]{ns})") ;
+  lifetimePlot->SetYTitle("Entries per bin (bin size: 8.75e-5 ns)") ;
   lifetimePlot->Draw();  
   cout<<"!!!!!!!!!!  chi2 = "<< lifetimePlot->chiSquare() << endl ;
 
+  TLatex Tl ;
+  Tl.SetNDC() ;
+  Tl.SetTextSize(0.04) ;
+  Tl.DrawLatex(0.55, 0.75, "#scale[1.1]{#tau_{#Xi_{c}^{+}}} = 0.525362  #pm 0.027682 #font[12]{ps}") ;
+  Tl.DrawLatex(0.55, 0.67, "#chi^{2} = 0.7872") ;
   // Save file as .pdf
-  c1.SaveAs("histo_Xi_cplus_TAU_lifetime_SigOnly_cut05FITTED_20bins_snglgaus.pdf") ;
+  c1->SaveAs("histoTAU_Xi_cplus_SigOnly_IPCHI3_PM70_20bins_snglgausFITTED.pdf") ;
  
   //______________________________________________________
   
@@ -78,14 +88,21 @@ void lifetimeFit()
   RooPlot* frame2 = tau.frame(Title("Residual Distribution")) ;
   frame2->addPlotable(hresid,"P") ;
   
-  RooPlot* frame3 = tau.frame(Title("Pull Distribution")) ;
+  RooPlot* frame3 = tau.frame(Title(" ")) ;
   frame3->addPlotable(hpull,"P") ;
   
-  TCanvas* c2 = new TCanvas("chi2residuals", "chi2residuals", 600,300) ;
-  c2->Divide(2) ;
-  c2->cd(1) ; gPad->SetLeftMargin(0.15) ; frame2->GetYaxis()->SetTitleOffset(1.6) ; frame2->Draw() ;
-  c2->cd(2) ; gPad->SetLeftMargin(0.15) ; frame3->GetYaxis()->SetTitleOffset(1.6) ; frame3->Draw() ;
-  c2->SaveAs("res_pull_xi_cut05_20bins_snglgaus.pdf") ;
+  TCanvas* c2 = new TCanvas("chi2residuals", "chi2residuals", 900,600) ;
+  //c2->Divide(2) ;
+  //c2->cd(1) ; 
+  gPad->SetGrid(0,1) ;
+  //gPad->SetLeftMargin(0.15) ; 
+  frame3->SetXTitle("time #it{t} (#it{ns})") ;
+  frame3->SetYTitle("Pull (#tau_{#Xi_{c}^{+}})") ;
+  frame3->GetYaxis()->SetTitleOffset(1.4) ; 
+  frame3->Draw() ;
+  //c2->cd(2) ; gPad->SetLeftMargin(0.15) ; frame3->GetYaxis()->SetTitleOffset(1.6) ; frame3->Draw() ;
+
+  c2->SaveAs("res_pull_xiTAU_IPCHI3_PM70_20bins_snglgaus.pdf") ;
   //______________________________________________________
   
 }

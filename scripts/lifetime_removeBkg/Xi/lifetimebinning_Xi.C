@@ -58,8 +58,8 @@ void binFit() {
 
   // Define dataset and make cuts.
   //RooDataSet* ds = (RooDataSet*)datafile->Get("ds") ;
-  //  RooDataSet ds("ds","ds",RooArgSet(Lambda_cplus_TAU, Lambda_cplus_M, Lambda_cplus_IPCHI2_OWNPV, BDTG),Import(*mytree),Cut("(0.00025<Lambda_cplus_TAU)&&(Lambda_cplus_TAU<0.002)&&(Lambda_cplus_M<2520)&&(2420<Lambda_cplus_M)&&(0.3541<BDTG)&&(Lambda_cplus_IPCHI2_OWNPV<3)")) ;  //+/-50MeV
-  RooDataSet ds("ds","ds",RooArgSet(Lambda_cplus_TAU, Lambda_cplus_M, Lambda_cplus_IPCHI2_OWNPV, BDTG),Import(*mytree),Cut("(0.00025<Lambda_cplus_TAU)&&(Lambda_cplus_TAU<0.002)&&(Lambda_cplus_M<2540)&&(2400<Lambda_cplus_M)&&(0.3541<BDTG)&&(Lambda_cplus_IPCHI2_OWNPV<3)")) ;  //+/-70MeV
+  RooDataSet ds("ds","ds",RooArgSet(Lambda_cplus_TAU, Lambda_cplus_M, Lambda_cplus_IPCHI2_OWNPV, BDTG),Import(*mytree),Cut("(0.00025<Lambda_cplus_TAU)&&(Lambda_cplus_TAU<0.002)&&(Lambda_cplus_M<2520)&&(2420<Lambda_cplus_M)&&(0.3541<BDTG)&&(Lambda_cplus_IPCHI2_OWNPV<3)")) ;  //+/-50MeV
+  //RooDataSet ds("ds","ds",RooArgSet(Lambda_cplus_TAU, Lambda_cplus_M, Lambda_cplus_IPCHI2_OWNPV, BDTG),Import(*mytree),Cut("(0.00025<Lambda_cplus_TAU)&&(Lambda_cplus_TAU<0.002)&&(Lambda_cplus_M<2540)&&(2400<Lambda_cplus_M)&&(0.3541<BDTG)&&(Lambda_cplus_IPCHI2_OWNPV<3)")) ;  //+/-70MeV
   //NB (for Neil): cut01=0.1506<BDTG; cut02=0.4250<BDTG; cut04=0.3541
 
   // Build probability density functions (PDFs).
@@ -69,9 +69,9 @@ void binFit() {
   ds.RooAbsData::getRange(Lambda_cplus_M, lowestM, highestM) ;
   double mass_peak = 2468 ;  // initial mean value for fit (from theory)
 
-  RooRealVar gausMean1("gausMean1", "gausMean1",mass_peak, lowestM, highestM, "MeV") ;
-  RooRealVar sigma1("sigma1","sigma1", 6, 0, 200) ;
-  RooGaussian gauss1("gauss1","gauss1",Lambda_cplus_M, gausMean1, sigma1) ;
+  RooRealVar gaus_mean("gaus_mean", "gaus_mean",mass_peak, lowestM, highestM, "MeV") ;
+  RooRealVar sigma("sigma","sigma", 6, 0, 200) ;
+  RooGaussian gauss1("gauss1","gauss1",Lambda_cplus_M, gaus_mean, sigma) ;
 
   RooRealVar gausMean2("gausMean2", "gausMean2",mass_peak, lowestM, highestM, "MeV") ;
   RooRealVar sigma2("sigma2","sigma2", 4, 0, 100) ;
@@ -81,8 +81,8 @@ void binFit() {
   RooAddPdf gaussComb("gaussComb","gaussComb", RooArgList(gauss1, gauss2), RooArgList(nFrac)) ;
 
   // Exponential PDF.
-  RooRealVar expoPar("expoPar","expoPar", -0.0001, -1., 0.);
-  RooExponential expo_bkg("expo_bkg", "expo_bkg", Lambda_cplus_M, expoPar);
+  RooRealVar exp_const("exp_const","exp_const", -0.0001, -1., 0.);
+  RooExponential expo_bkg("expo_bkg", "expo_bkg", Lambda_cplus_M, exp_const);
 
   // Model PDF.
   RooRealVar nSignal("nSignal","nSignal", 23000, -1000, 1500000);
@@ -100,11 +100,24 @@ void binFit() {
   // Plot the data and the fit (not necesary, but provides a vidual confirmation that
   // things 'look good'.)
 
-  RooPlot *fullDataFit = Lambda_cplus_M.frame(Title("-Title-"));
+  RooPlot *fullDataFit = Lambda_cplus_M.frame(Title(" "));
+  params = RooArgSet(gaus_mean, sigma, exp_const) ;
   //ds.plotOn(frame,Binning(25)); //default is 100 bins
   ds.plotOn(fullDataFit, Name("data"), MarkerColor(kBlack)) ;
   ds.statOn(fullDataFit, Layout(0.65,0.88,0.2), What("N")) ; //NB Layout(xmin,xmax,ymax)
   model.plotOn(fullDataFit, Name("Model"), DrawOption("L")) ;
+  fullDataFit->GetYaxis()->SetTitleOffset(1.4);
+  fullDataFit->SetXTitle("mass (MeV)") ;
+  fullDataFit->SetYTitle("Entries per bin (bin size: 1 MeV)") ; //CHANGE
+  
+  //=======here=============
+  /*
+  model.plotOn(fullDataFit, Components(expo_bkg), LineStyle(kDashed)) ;
+  model.paramOn(fullDataFit,Layout(0.17, 0.43, 0.88), Parameters(params)) ; //NB Layout(xmin,xmax,ymax)
+  fullDataFit->getAttText()->SetTextSize(0.028) ;
+  */
+  //=======here=============
+
 
   // Plot the residuals and Pulls...
   //______________________________________________________
@@ -112,25 +125,32 @@ void binFit() {
   RooHist* hresid = fullDataFit->residHist() ;
   RooHist* hpull = fullDataFit->pullHist() ;
 
-  RooPlot* frame2 = Lambda_cplus_M.frame(Title("Residual Distribution")) ;
-  frame2->addPlotable(hresid,"P") ;
+  //  RooPlot* frame2 = Lambda_cplus_M.frame(Title("Residual Distribution")) ;
+  //frame2->addPlotable(hresid,"P") ;
 
-  RooPlot* frame3 = Lambda_cplus_M.frame(Title("Pull Distribution")) ;
+  RooPlot* frame3 = Lambda_cplus_M.frame(Title(" ")) ;
   frame3->addPlotable(hpull,"P") ;
 
-  TCanvas* c2 = new TCanvas("chi2residuals", "chi2residuals", 600,300) ;
-  c2->Divide(2) ;
-  c2->cd(1) ; gPad->SetLeftMargin(0.15) ; frame2->GetYaxis()->SetTitleOffset(1.6) ; frame2->Draw() ;
-  c2->cd(2) ; gPad->SetLeftMargin(0.15) ; frame3->GetYaxis()->SetTitleOffset(1.6) ; frame3->Draw() ;
-  // c2->SaveAs("res_pull_xiM_IPCHI3_PM50_20bins_snglgaus.pdf") ;
- c2->SaveAs("res_pull_xiM_IPCHI3_PM70_20bins_snglgaus.pdf") ;
-  //______________________________________________________
 
+
+  TCanvas* c2 = new TCanvas("chi2residuals", "chi2residuals", 900,600) ;
+  gPad->SetGrid(0,1) ;
+  //c2->Divide(2) ;
+  //c2->cd(1) ; gPad->SetLeftMargin(0.15) ; frame2->GetYaxis()->SetTitleOffset(1.6) ; frame2->Draw() ;
+  //c2->cd(2) ; 
+  //gPad->SetLeftMargin(0.15) ; 
+  frame3->SetXTitle("mass (MeV)") ;
+  frame3->SetYTitle("Mass Pull (#Xi_{c}^{+})") ;
+  frame3->GetYaxis()->SetTitleOffset(1.4) ; 
+  frame3->Draw() ;
+  c2->SaveAs("res_pull_xiM_IPCHI3_PM50_20bins_snglgaus.pdf") ;
+  //c2->SaveAs("res_pull_xiM_IPCHI3_PM70_20bins_snglgaus.pdf") ;
+
+  //=========HERE==========
   model.plotOn(fullDataFit, Components(expo_bkg), LineStyle(kDashed)) ;
-  model.paramOn(fullDataFit,Layout(0.19, 0.45, 0.88)) ;
+  model.paramOn(fullDataFit,Layout(0.15, 0.43, 0.88), Parameters(params)) ; //NB Layout(xmin,xmax,ymax)
   fullDataFit->getAttText()->SetTextSize(0.022) ;
-
-
+  //=========HERE==========
 
 
 
@@ -140,12 +160,12 @@ void binFit() {
   */
 
   // Set model fit variables to constants (NOT COEFFs!)
-  gausMean1.setConstant() ;
+  gaus_mean.setConstant() ;
   gausMean2.setConstant() ;
-  sigma1.setConstant() ;
+  sigma.setConstant() ;
   sigma2.setConstant() ;
   nFrac.setConstant() ;
-  expoPar.setConstant() ;
+  exp_const.setConstant() ;
  
 
 
@@ -200,7 +220,6 @@ void binFit() {
 
   TH1D *h_Signal = new TH1D("h_Signal","h_Signal",20 ,0.00025 ,0.002) ; // (**)
   int j ;
-  int tempnumber ;
   
   // Fill histogram
   for (j=0; j<nBins; j++){
@@ -214,8 +233,8 @@ void binFit() {
   // from the fits made in the 'for' loop, above.
 
   //TFile hf("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/histoTAU_Xi_cplus_SigOnly_cut04_20bins_snglgaus.root", "RECREATE") ;
-  //  TFile hf("~/Documents/uni/LHCb_CharmSummerProj/learning_root/histoTAU_Xi_cplus_SigOnly_20bins_IPCHI3_PM50_snglgaus.root", "RECREATE") ;
-  TFile hf("~/Documents/uni/LHCb_CharmSummerProj/learning_root/histoTAU_Xi_cplus_SigOnly_20bins_IPCHI3_PM70_snglgaus.root", "RECREATE") ;
+  TFile hf("~/Documents/uni/LHCb_CharmSummerProj/learning_root/histoTAU_Xi_cplus_SigOnly_20bins_IPCHI3_PM50_snglgaus.root", "RECREATE") ;
+  //TFile hf("~/Documents/uni/LHCb_CharmSummerProj/learning_root/histoTAU_Xi_cplus_SigOnly_20bins_IPCHI3_PM70_snglgaus.root", "RECREATE") ;
   h_Signal->Write() ;
   cout<<"histogram written..."<<endl ;
   //h_Signal->Draw();
@@ -239,7 +258,9 @@ void binFit() {
 
 
 
-
+  TCanvas *c4 = new TCanvas(" ", " ",900, 600) ;
+  fullDataFit->Draw() ;
+  c4->SaveAs("FullFit_Xi_IPCHI3_PM50_snglgaus.pdf") ;
 
 
   TCanvas *c102 = new TCanvas("c102","",600,900) ;
@@ -255,21 +276,21 @@ void binFit() {
   vis_lifetimePlot->Draw() ;
 
   c102->Update() ;
-  //  c102->SaveAs("visConfXi_20bins_IPCHI3_PM50_snglgaus.pdf") ;
-  c102->SaveAs("visConfXi_20bins_IPCHI3_PM70_snglgaus.pdf") ;
+  c102->SaveAs("visConfXi_20bins_IPCHI3_PM50_snglgaus.pdf") ;
+  //c102->SaveAs("visConfXi_20bins_IPCHI3_PM70_snglgaus.pdf") ;
 
   // Print useful info to screen
 
   cout<<endl<<"   ************info************"<<endl<<endl;
   cout<<"  Fit Quality>>> chi2 = "<< fullDataFit->chiSquare() << endl ;  
   cout<<"Double Gaussian fit parameters to full data (signal + background):"<<endl;
-  cout<<"  "<<gausMean1<<endl ;
+  cout<<"  "<<gaus_mean<<endl ;
   cout<<"  "<<gausMean2<<endl ;
-  cout<<"  "<<sigma1<<endl ;
+  cout<<"  "<<sigma<<endl ;
   cout<<"  "<<sigma2<<endl ;
   cout<<"  "<<nFrac<<endl ;
   cout<<"Exponential fit parameters to full data (signal + background):"<<endl;
-  cout<<"  "<<expoPar<<endl<<endl ;
+  cout<<"  "<<exp_const<<endl<<endl ;
 
 
 

@@ -112,13 +112,8 @@ void binFit() {
   //  fullDataFit->SetYTitle("Entries per bin (bin size: 1 MeV)") ; // +/-50MeV //CHANGE
   fullDataFit->SetYTitle("Entries per bin (bin size: 1.4 MeV)") ;   // +/-70MeV
   
-  //=======here=============
-  /*
-  model.plotOn(fullDataFit, Components(expo_bkg), LineStyle(kDashed)) ;
-  model.paramOn(fullDataFit,Layout(0.17, 0.43, 0.88), Parameters(params)) ; //NB Layout(xmin,xmax,ymax)
-  fullDataFit->getAttText()->SetTextSize(0.028) ;
-  */
-  //=======here=============
+  //=======Jump to 'here'=============
+
 
 
   // Plot the residuals and Pulls...
@@ -147,12 +142,14 @@ void binFit() {
   frame3->Draw() ;
   //c2->SaveAs("res_pull_xiM_IPCHI3_PM50_20bins_snglgaus.pdf") ;  //CHANGE
   c2->SaveAs("res_pull_xiM_IPCHI3_PM70_20bins_snglgaus.pdf") ;
+ //______________________________________________________
 
-  //=========HERE==========
+
+  //========='here'==========
   model.plotOn(fullDataFit, Components(expo_bkg), LineStyle(kDashed)) ;
   model.paramOn(fullDataFit,Layout(0.15, 0.43, 0.88), Parameters(params)) ; //NB Layout(xmin,xmax,ymax)
   fullDataFit->getAttText()->SetTextSize(0.022) ;
-  //=========HERE==========
+ 
 
 
 
@@ -238,15 +235,20 @@ void binFit() {
   //TFile hf("~/Documents/uni/LHCb_CharmSummerProj/learning_root/histoTAU_Xi_cplus_SigOnly_20bins_IPCHI3_PM50_snglgaus.root", "RECREATE") ;  //CHANGE
   TFile hf("~/Documents/uni/LHCb_CharmSummerProj/learning_root/histoTAU_Xi_cplus_SigOnly_20bins_IPCHI3_PM70_snglgaus.root", "RECREATE") ;
   h_Signal->Write() ;
-  cout<<"histogram written..."<<endl ;
-  //h_Signal->Draw();
+
+
+  // Plot the full sig & bkg fit (after cuts)
+  TCanvas *c4 = new TCanvas(" ", " ",900, 600) ;
+  fullDataFit->Draw() ;
+  //c4->SaveAs("FullFit_Xi_IPCHI3_PM50_snglgaus.pdf") ; //CHANGE
+  c4->SaveAs("FullFit_Xi_IPCHI3_PM70_snglgaus.pdf") ;
 
 
 
   //=================NON-ESSENTIAL TO ANALYSIS=================
-  // This section draws the overall fit (to sig and background for all data) and draws the signal-only 
+  // This section draws the overall fit (to sig and background (after cuts) for all data) and draws the signal-only 
   // TAU variable hitogram with a exponential fit. This is simple for a visual confirmation that 
-  // initial fit is sensible, and that output histo is exponential in form. (save as: visConfXi_cut01.png)
+  // initial fit is sensible, and that output histo is exponential in form. 
 
   RooDataHist vis_binnedData("vis_binnedData", "vis_binnedData", RooArgSet(Lambda_cplus_TAU),h_Signal) ;  
   RooRealVar vis_expo("vis_expo","exponential parameter for visual confirmation", -5000.,-5000., 0.) ;
@@ -255,15 +257,6 @@ void binFit() {
   RooPlot* vis_lifetimePlot = Lambda_cplus_TAU.frame() ;
   vis_binnedData.plotOn(vis_lifetimePlot) ;
   vis_lifetimePDF.plotOn(vis_lifetimePlot) ;
-
-
-
-
-
-  TCanvas *c4 = new TCanvas(" ", " ",900, 600) ;
-  fullDataFit->Draw() ;
-  //c4->SaveAs("FullFit_Xi_IPCHI3_PM50_snglgaus.pdf") ; //CHANGE
-  c4->SaveAs("FullFit_Xi_IPCHI3_PM70_snglgaus.pdf") ;
 
 
   TCanvas *c102 = new TCanvas("c102","",600,900) ;
@@ -286,7 +279,7 @@ void binFit() {
 
   cout<<endl<<"   ************info************"<<endl<<endl;
   cout<<"  Fit Quality>>> chi2 = "<< fullDataFit->chiSquare() << endl ;  
-  cout<<"Double Gaussian fit parameters to full data (signal + background):"<<endl;
+  cout<<"Gaussian fit parameters to full data (signal + background):"<<endl;
   cout<<"  "<<gaus_mean<<endl ;
   cout<<"  "<<gausMean2<<endl ;
   cout<<"  "<<sigma<<endl ;

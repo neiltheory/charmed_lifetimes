@@ -30,7 +30,7 @@ using namespace RooFit ;
 
 
 void binFit() {
-  gROOT->SetBatch(kTRUE);
+  gROOT->SetBatch(kTRUE); // stops "visial confirmation plots" being shown onscreen.
   // Open appropriate .root file.
   //TFile *datafile = TFile::Open("~/Documents/uni/LHCb_CharmSummerProj/Gedcode/baryon-lifetimes-2015/data/run-II-data/datafileLambda_TAUmin200fs_max2200fs_Mmin2216_max2356.root");
   //TFile *datafile = TFile::Open("~/Documents/uni/LHCb_CharmSummerProj/Gedcode/baryon-lifetimes-2015/data/run-II-data/datafileLambda_TAUmin200fs_max2200fs_Mmin2216_max2356_CutIPCHI2lt3.root"); 
@@ -48,7 +48,8 @@ TFile *datafile = TFile::Open("~/Documents/uni/LHCb_CharmSummerProj/learning_roo
   double highestTAU;
   double lowestTAU;
 
-  RooRealVar Lambda_cplus_M("Lambda_cplus_M","Lambda_cplus_M",2216 ,2356, "MeV") ; 
+  RooRealVar Lambda_cplus_M("Lambda_cplus_M","Lambda_cplus_M",2216 ,2356, "MeV") ; // +/-70MeV  //CHANGE
+  //RooRealVar Lambda_cplus_M("Lambda_cplus_M","Lambda_cplus_M",2236 ,2336, "MeV") ; // +/-50MeV 
   double highestM;
   double lowestM;
 
@@ -59,7 +60,8 @@ TFile *datafile = TFile::Open("~/Documents/uni/LHCb_CharmSummerProj/learning_roo
 
   // Define dataset and make cuts.
   //RooDataSet* ds = (RooDataSet*)datafile->Get("ds") ;
-  RooDataSet ds("ds","ds",RooArgSet(Lambda_cplus_TAU, Lambda_cplus_M, Lambda_cplus_IPCHI2_OWNPV, BDTG),Import(*mytree),Cut("(0.00025<Lambda_cplus_TAU)&&(Lambda_cplus_TAU<0.002)&&(Lambda_cplus_M<2356)&&(2216<Lambda_cplus_M)&&(0.0107<BDTG)&&(Lambda_cplus_IPCHI2_OWNPV<3)")) ;
+  RooDataSet ds("ds","ds",RooArgSet(Lambda_cplus_TAU, Lambda_cplus_M, Lambda_cplus_IPCHI2_OWNPV, BDTG),Import(*mytree),Cut("(0.00025<Lambda_cplus_TAU)&&(Lambda_cplus_TAU<0.002)&&(Lambda_cplus_M<2356)&&(2216<Lambda_cplus_M)&&(0.0107<BDTG)&&(Lambda_cplus_IPCHI2_OWNPV<3)")) ; // +/-70MeV  //CHANGE
+  //RooDataSet ds("ds","ds",RooArgSet(Lambda_cplus_TAU, Lambda_cplus_M, Lambda_cplus_IPCHI2_OWNPV, BDTG),Import(*mytree),Cut("(0.00025<Lambda_cplus_TAU)&&(Lambda_cplus_TAU<0.002)&&(Lambda_cplus_M<2336)&&(2236<Lambda_cplus_M)&&(0.0107<BDTG)&&(Lambda_cplus_IPCHI2_OWNPV<3)")) ; // +/-50MeV  //CHANGE
 
 
   // Build probability density functions (PDFs).
@@ -69,22 +71,22 @@ TFile *datafile = TFile::Open("~/Documents/uni/LHCb_CharmSummerProj/learning_roo
   ds.RooAbsData::getRange(Lambda_cplus_M, lowestM, highestM) ;
   double mass_peak = 2286 ;  // initial mean value for fit (from theory)
 
-  RooRealVar gausMean1("gausMean1", "gausMean1",mass_peak, lowestM, highestM, "MeV") ;
+  RooRealVar gaus_mean1("gaus_mean1", "gaus_mean1",mass_peak, lowestM, highestM, "MeV") ;
   RooRealVar sigma1("sigma1","sigma1", 6, 0, 50) ;
-  RooGaussian gauss1("gauss1","gauss1",Lambda_cplus_M, gausMean1, sigma1) ;
+  RooGaussian gauss1("gauss1","gauss1",Lambda_cplus_M, gaus_mean1, sigma1) ;
 
-  RooRealVar gausMean2("gausMean2", "gausMean2",mass_peak, lowestM, highestM, "MeV") ;
+  RooRealVar gaus_mean2("gaus_mean2", "gaus_mean2",mass_peak, lowestM, highestM, "MeV") ;
   RooRealVar sigma2("sigma2","sigma2", 4, 0, 100) ;
-  RooGaussian gauss2("gauss2","gauss2",Lambda_cplus_M, gausMean2, sigma2) ;
+  RooGaussian gauss2("gauss2","gauss2",Lambda_cplus_M, gaus_mean2, sigma2) ;
 
-  RooRealVar nFrac("nFrac", "nFrac", 0.5, 0.0, 1.) ;
-  RooAddPdf gaussComb("gaussComb","gaussComb", RooArgList(gauss1, gauss2), RooArgList(nFrac)) ;
+  RooRealVar gaus1_fraction("gaus1_fraction", "gaus1_fraction", 0.5, 0.0, 1.) ;
+  RooAddPdf gaussComb("gaussComb","gaussComb", RooArgList(gauss1, gauss2), RooArgList(gaus1_fraction)) ;
 
   //Lambda_cplus_TAU.setRange("R1",0.00018, 0.0012);
    
   // Exponential PDF.
-  RooRealVar expoPar("expoPar","expoPar", -0.0001, -1., 0.);
-  RooExponential expo_bkg("expo_bkg", "expo_bkg", Lambda_cplus_M, expoPar);
+  RooRealVar exp_const("exp_const","exp_const", -0.0001, -1., 0.);
+  RooExponential expo_bkg("expo_bkg", "expo_bkg", Lambda_cplus_M, exp_const);
 
   // Model PDF.
   RooRealVar nSignal("nSignal","nSignal", 23000, 0, 409570);
@@ -109,26 +111,69 @@ TFile *datafile = TFile::Open("~/Documents/uni/LHCb_CharmSummerProj/learning_roo
   // Plot the data and the fit (not necesary, but provides a vidual confirmation that
   // things 'look good'.)
 
-  RooPlot *fullDataFit = Lambda_cplus_M.frame(Title("-Title-"));
+  RooPlot *fullDataFit = Lambda_cplus_M.frame(Title(" "));
+  params = RooArgSet(gaus1_mean, gaus2_mean, sigma1, sigma2, exp_const) ;
   //ds.plotOn(frame,Binning(25)); //default is 100 bins
   ds.plotOn(fullDataFit, Name("data"), MarkerColor(kBlack)) ;
   ds.statOn(fullDataFit, Layout(0.65,0.88,0.9), What("N")) ; //NB Layout(xmin,xmax,ymax)
   model.plotOn(fullDataFit, Name("Model"), DrawOption("L")) ;
+  fullDataFit->GetYaxis()->SetTitleOffset(1.4);
+  fullDataFit->SetXTitle("mass (MeV)") ;
+  //  fullDataFit->SetYTitle("Entries per bin (bin size: 1 MeV)") ; // +/-50MeV //CHANGE
+  fullDataFit->SetYTitle("Entries per bin (bin size: 1.4 MeV)") ;   // +/-70MeV
+
+  //=======Jump to 'here'=============
+
+
+
+  // Plot the residuals and Pulls...
+  //______________________________________________________
+
+  RooHist* hresid = fullDataFit->residHist() ;
+  RooHist* hpull = fullDataFit->pullHist() ;
+
+  //  RooPlot* frame2 = Lambda_cplus_M.frame(Title("Residual Distribution")) ;
+  //frame2->addPlotable(hresid,"P") ;
+
+  RooPlot* frame3 = Lambda_cplus_M.frame(Title(" ")) ;
+  frame3->addPlotable(hpull,"P") ;
+
+
+
+  TCanvas* c2 = new TCanvas("chi2residuals", "chi2residuals", 900,600) ;
+  gPad->SetGrid(0,1) ;
+  //c2->Divide(2) ;
+  //c2->cd(1) ; gPad->SetLeftMargin(0.15) ; frame2->GetYaxis()->SetTitleOffset(1.6) ; frame2->Draw() ;
+  //c2->cd(2) ;
+  //gPad->SetLeftMargin(0.15) ;
+  frame3->SetXTitle("mass (MeV)") ;
+  frame3->SetYTitle("Mass Pull (#Lambda_{c}^{+})") ;
+  frame3->GetYaxis()->SetTitleOffset(1.4) ;
+  frame3->Draw() ;
+  //c2->SaveAs("pull_LambdaM_IPCHI3_PM50_20bins_dblgaus.pdf") ;  //CHANGE
+  c2->SaveAs("pull_LambdaM_IPCHI3_PM70_20bins_dblgaus.pdf") ;
+  //______________________________________________________
+
+
+  //========='here'==========
+
+
   model.plotOn(fullDataFit, Components(expo_bkg), LineStyle(kDashed)) ;
   model.paramOn(fullDataFit,Layout(0.2, 0.5, 0.88)) ; //was 0.4
   fullDataFit->getAttText()->SetTextSize(0.022) ;
 
+  /*
   RooDataHist hist4Chi2("hist4Chi2","hist4Chi2", RooArgSet(Lambda_cplus_M), ds) ;
   Double_t chi2 = fullDataFit->chiSquare("Model","data",7) ;
-
+  */
 
   // Set model fit variables to constants (NOT COEFFs!)
-  gausMean1.setConstant() ;
-  gausMean2.setConstant() ;
+  gaus_mean1.setConstant() ;
+  gaus_mean2.setConstant() ;
   sigma1.setConstant() ;
   sigma2.setConstant() ;
-  nFrac.setConstant() ;
-  expoPar.setConstant() ;
+  gaus1_fraction.setConstant() ;
+  exp_const.setConstant() ;
  
 
 
@@ -183,7 +228,8 @@ TFile *datafile = TFile::Open("~/Documents/uni/LHCb_CharmSummerProj/learning_roo
 
   TH1D *h_Signal = new TH1D("h_Signal","h_Signal",20 ,0.00025 ,0.002) ; // (**)
   int j ;
-     // Fill histogram
+    
+  // Fill histogram
   for (j=0; j<nBins; j++){
   h_Signal->SetBinContent(j+1, signalYield[j]) ;
   h_Signal->SetBinError(j+1, signalError[j]) ;
@@ -195,17 +241,22 @@ TFile *datafile = TFile::Open("~/Documents/uni/LHCb_CharmSummerProj/learning_roo
   // from the fits made in the 'for' loop, above.
 
   //  TFile hf("/afs/phas.gla.ac.uk/user/n/nwarrack/public_ppe/myLHCb/Gedcode/LHCb_CharmedHadrons/data/histoTAU_Lambda_cplus_SigOnly_cut04_20bins.root", "RECREATE") ;
-  TFile hf("~/Documents/uni/LHCb_CharmSummerProj/learning_root/histoTAU_Lambda_cplus_SigOnly_IPCHI3_PM70_20bins.root", "RECREATE") ;
+  TFile hf("~/Documents/uni/LHCb_CharmSummerProj/learning_root/histoTAU_Lambda_cplus_SigOnly_IPCHI3_PM70_20bins_dblgaus.root", "RECREATE") ; //CHANGE
+  //TFile hf("~/Documents/uni/LHCb_CharmSummerProj/learning_root/histoTAU_Lambda_cplus_SigOnly_IPCHI3_PM50_20bins_dblgaus.root", "RECREATE") ;
   h_Signal->Write() ;
-  cout<<"histogram written..."<<endl ;
-  //h_Signal->Draw();
 
+
+  // Plot the full sig & bkg fit (after cuts)
+  TCanvas *c4 = new TCanvas(" ", " ",900, 600) ;
+  fullDataFit->Draw() ;
+  //c4->SaveAs("FullFit_Xi_IPCHI3_PM50_snglgaus.pdf") ; //CHANGE
+  c4->SaveAs("FullFit_Xi_IPCHI3_PM70_snglgaus.pdf") ;
 
 
   //=================NON-ESSENTIAL TO ANALYSIS=================
-  // This section draws the overall fit (to sig and background for all data) and draws the signal-only 
+  // This section draws the overall fit (to sig and background (after cuts) for all data) and draws the signal-only 
   // TAU variable hitogram with a exponential fit. This is simple for a visual confirmation that 
-  // initial fit is sensible, and that output histo is exponential in form. (save as: visConf_cut01.png)
+  // initial fit is sensible, and that output histo is exponential in form. 
 
   RooDataHist vis_binnedData("vis_binnedData", "vis_binnedData", RooArgSet(Lambda_cplus_TAU),h_Signal) ;  
   RooRealVar vis_expo("vis_expo","exponential parameter for visual confirmation", -5000.,-5000., 0.) ;
@@ -229,20 +280,21 @@ TFile *datafile = TFile::Open("~/Documents/uni/LHCb_CharmSummerProj/learning_roo
   vis_lifetimePlot->Draw() ;
 
   c102->Update() ;
-  c102->SaveAs("visConf_Lambda_20bins_IPCHI3_PM70.pdf") ;
+  c102->SaveAs("visConf_Lambda_20bins_IPCHI3_PM70_dblgaus.pdf") ; //CHANGE
+  //c102->SaveAs("visConf_Lambda_20bins_IPCHI3_PM50_dblgaus.pdf") ;
 
   // Print useful info to screen
 
   cout<<endl<<"   ************info************"<<endl<<endl;
-  
-  cout<<"Double Gaussian fit parameters to full data (signal + background):"<<endl;
-  cout<<"  "<<gausMean1<<endl ;
-  cout<<"  "<<gausMean2<<endl ;
+  cout<<"  Fit Quality>>> chi2 = "<< fullDataFit->chiSquare() << endl ;
+  cout<<"Gaussian fit parameters to full data (signal + background):"<<endl;
+  cout<<"  "<<gaus_mean1<<endl ;
+  cout<<"  "<<gaus_mean2<<endl ;
   cout<<"  "<<sigma1<<endl ;
   cout<<"  "<<sigma2<<endl ;
-  cout<<"  "<<nFrac<<endl ;
+  cout<<"  "<<gaus1_fraction<<endl ;
   cout<<"Exponential fit parameters to full data (signal + background):"<<endl;
-  cout<<"  "<<expoPar<<endl<<endl ;
+  cout<<"  "<<exp_const<<endl<<endl ;
 
 
 
